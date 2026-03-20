@@ -1,0 +1,2227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fuzileiro Naval — Preparatório de Concurso</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #112240;
+    --navy-light: #1d3461;
+    --gold: #c9a227;
+    --gold-light: #e8c44a;
+    --green: #0d7c45;
+    --green-light: #13a55e;
+    --red: #b91c1c;
+    --white: #f0f4f8;
+    --gray: #8898aa;
+    --text: #cbd5e1;
+    --border: rgba(201,162,39,0.2);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--navy);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* LOGIN SCREEN */
+  #loginScreen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #050d1a 0%, #0a1628 50%, #071a30 100%);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  #loginScreen::before {
+    content:'';
+    position: absolute;
+    inset:0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(201,162,39,0.02) 60px, rgba(201,162,39,0.02) 61px),
+      repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(201,162,39,0.02) 60px, rgba(201,162,39,0.02) 61px);
+    pointer-events:none;
+  }
+
+  .login-box {
+    position: relative;
+    z-index:1;
+    background: rgba(17,34,64,0.95);
+    border: 1px solid rgba(201,162,39,0.3);
+    border-top: 3px solid var(--gold);
+    border-radius: 12px;
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+    animation: fadeIn 0.4s ease;
+  }
+
+  .login-emblem {
+    width: 72px; height: 72px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    color: var(--navy);
+  }
+
+  .login-box h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  .login-box p {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 32px;
+  }
+
+  .login-input-wrap {
+    position: relative;
+    margin-bottom: 16px;
+  }
+
+  .login-input {
+    width: 100%;
+    background: rgba(10,22,40,0.8);
+    border: 1px solid rgba(201,162,39,0.25);
+    border-radius: 6px;
+    padding: 14px 48px 14px 16px;
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    letter-spacing: 2px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .login-input:focus { border-color: var(--gold); }
+  .login-input::placeholder { color: var(--gray); letter-spacing: 1px; font-size: 13px; }
+
+  .toggle-pw {
+    position: absolute;
+    right: 14px; top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--gray);
+    transition: color 0.2s;
+  }
+
+  .toggle-pw:hover { color: var(--gold); }
+
+  .login-btn {
+    width: 100%;
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    border-radius: 6px;
+    padding: 14px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 3px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: all 0.15s;
+  }
+
+  .login-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .login-btn:active { transform: translateY(0); }
+
+  .login-error {
+    background: rgba(185,28,28,0.15);
+    border: 1px solid rgba(185,28,28,0.4);
+    border-radius: 5px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #fca5a5;
+    margin-top: 12px;
+    display: none;
+    animation: shake 0.4s ease;
+  }
+
+  .login-hint {
+    margin-top: 20px;
+    font-size: 11px;
+    color: rgba(136,152,170,0.5);
+    letter-spacing: 1px;
+  }
+
+  @keyframes shake {
+    0%,100%{transform:translateX(0)}
+    20%{transform:translateX(-8px)}
+    40%{transform:translateX(8px)}
+    60%{transform:translateX(-5px)}
+    80%{transform:translateX(5px)}
+  }
+
+  #appContent { display: none; }
+
+  /* BACKGROUND TEXTURE */
+  body::before {
+    content:'';
+    position: fixed;
+    inset:0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(201,162,39,0.02) 60px, rgba(201,162,39,0.02) 61px),
+      repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(201,162,39,0.02) 60px, rgba(201,162,39,0.02) 61px);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, #050d1a 0%, var(--navy-mid) 50%, #071a30 100%);
+    border-bottom: 2px solid var(--gold);
+    padding: 0;
+    position: sticky;
+    top:0;
+    z-index:100;
+    box-shadow: 0 4px 40px rgba(0,0,0,0.6);
+  }
+
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 12px 24px;
+  }
+
+  .logo-emblem {
+    width: 52px; height: 52px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink:0;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--navy);
+    font-weight: 900;
+  }
+
+  .header-title {
+    flex:1;
+  }
+
+  .header-title h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    line-height:1;
+  }
+
+  .header-title p {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--gray);
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .progress-bar-wrap {
+    display: flex; flex-direction: column; align-items: flex-end; gap:4px;
+  }
+
+  .xp-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--gold);
+  }
+
+  .progress-bar {
+    width: 160px; height: 8px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid rgba(201,162,39,0.2);
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    border-radius: 4px;
+    transition: width 0.6s ease;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--navy-mid);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 78px;
+    z-index:99;
+  }
+
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .nav-inner::-webkit-scrollbar { display:none; }
+
+  .nav-btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--gray);
+    background: none;
+    border: none;
+    padding: 14px 22px;
+    cursor: pointer;
+    white-space: nowrap;
+    position: relative;
+    transition: color 0.2s;
+  }
+
+  .nav-btn::after {
+    content:'';
+    position: absolute;
+    bottom:0; left:0; right:0;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transition: transform 0.2s;
+  }
+
+  .nav-btn:hover { color: var(--white); }
+  .nav-btn.active { color: var(--gold); }
+  .nav-btn.active::after { transform: scaleX(1); }
+
+  /* MAIN */
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    position: relative;
+    z-index:1;
+  }
+
+  /* SECTIONS */
+  .section { display:none; }
+  .section.active { display:block; animation: fadeIn 0.3s ease; }
+
+  @keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+
+  /* DASHBOARD */
+  .welcome-banner {
+    background: linear-gradient(135deg, var(--navy-light) 0%, #0d2a4a 100%);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--gold);
+    border-radius: 8px;
+    padding: 28px 32px;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .welcome-banner::before {
+    content: '⚓';
+    position: absolute;
+    right: 24px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 80px;
+    opacity: 0.06;
+  }
+
+  .welcome-banner h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 2px;
+    color: var(--gold);
+  }
+
+  .welcome-banner p {
+    color: var(--text);
+    margin-top: 6px;
+    font-size: 15px;
+    max-width: 600px;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .stat-card {
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .stat-card:hover { transform: translateY(-2px); border-color: var(--gold); }
+
+  .stat-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    color: var(--gold);
+    line-height:1;
+  }
+
+  .stat-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-top: 4px;
+  }
+
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .module-card {
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .module-card::before {
+    content:'';
+    position: absolute;
+    top:0; left:0; right:0;
+    height: 3px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transition: transform 0.2s;
+  }
+
+  .module-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
+  .module-card:hover::before { transform: scaleX(1); }
+
+  .module-icon { font-size: 32px; margin-bottom: 12px; }
+
+  .module-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .module-desc {
+    font-size: 13px;
+    color: var(--gray);
+    line-height: 1.5;
+  }
+
+  .module-progress {
+    margin-top: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .module-progress .bar {
+    flex:1; height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .module-progress .fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 2px;
+  }
+
+  .module-progress span {
+    font-size: 11px;
+    color: var(--gold);
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 1px;
+    min-width: 30px;
+    text-align: right;
+  }
+
+  /* TEORIA */
+  .theory-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 24px;
+  }
+
+  @media(max-width: 768px) {
+    .theory-layout { grid-template-columns: 1fr; }
+  }
+
+  .sidebar {
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    height: fit-content;
+    position: sticky;
+    top: 140px;
+  }
+
+  .sidebar-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .topic-list { list-style: none; }
+
+  .topic-item {
+    padding: 8px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--gray);
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .topic-item:hover { background: rgba(201,162,39,0.08); color: var(--white); }
+  .topic-item.active { background: rgba(201,162,39,0.15); color: var(--gold); }
+  .topic-item .dot { width:6px; height:6px; border-radius:50%; background: var(--gray); flex-shrink:0; }
+  .topic-item.done .dot { background: var(--green-light); }
+  .topic-item.active .dot { background: var(--gold); }
+
+  .content-panel {
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 32px;
+  }
+
+  .content-panel h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .content-panel .subtitle {
+    font-size: 13px;
+    color: var(--gray);
+    letter-spacing: 1px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .theory-text h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin: 24px 0 10px;
+  }
+
+  .theory-text p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .theory-text ul {
+    margin: 10px 0 16px 20px;
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .formula-box {
+    background: rgba(201,162,39,0.06);
+    border: 1px solid rgba(201,162,39,0.3);
+    border-left: 3px solid var(--gold);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    letter-spacing: 1px;
+    color: var(--gold-light);
+  }
+
+  .tip-box {
+    background: rgba(13,124,69,0.1);
+    border: 1px solid rgba(13,124,69,0.3);
+    border-left: 3px solid var(--green-light);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 14px;
+    color: #86efac;
+  }
+
+  .tip-box strong { color: var(--green-light); }
+
+  .nav-theory {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* EXERCÍCIOS */
+  .question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+  }
+
+  .question-meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .badge {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+
+  .badge-math { background: rgba(59,130,246,0.15); color: #93c5fd; border: 1px solid rgba(59,130,246,0.3); }
+  .badge-port { background: rgba(139,92,246,0.15); color: #c4b5fd; border: 1px solid rgba(139,92,246,0.3); }
+  .badge-easy { background: rgba(13,124,69,0.15); color: #86efac; border: 1px solid rgba(13,124,69,0.3); }
+  .badge-med { background: rgba(201,162,39,0.15); color: var(--gold-light); border: 1px solid rgba(201,162,39,0.3); }
+  .badge-hard { background: rgba(185,28,28,0.15); color: #fca5a5; border: 1px solid rgba(185,28,28,0.3); }
+
+  .question-counter {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--gold);
+    letter-spacing: 2px;
+  }
+
+  .question-box {
+    background: var(--navy);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px;
+    margin-bottom: 24px;
+  }
+
+  .question-text {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--white);
+    margin-bottom: 24px;
+  }
+
+  .options-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+  .option-btn {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 14px 18px;
+    text-align: left;
+    cursor: pointer;
+    color: var(--text);
+    font-size: 15px;
+    font-family: 'Barlow', sans-serif;
+    transition: all 0.15s;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .option-btn:hover { background: rgba(201,162,39,0.06); border-color: rgba(201,162,39,0.3); color: var(--white); }
+
+  .option-btn .opt-letter {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--gold);
+    min-width: 18px;
+  }
+
+  .option-btn.correct { background: rgba(13,124,69,0.15); border-color: var(--green-light); color: #86efac; }
+  .option-btn.wrong { background: rgba(185,28,28,0.15); border-color: #f87171; color: #fca5a5; }
+  .option-btn:disabled { cursor: default; }
+
+  .feedback-box {
+    background: rgba(13,124,69,0.08);
+    border: 1px solid rgba(13,124,69,0.3);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-top: 16px;
+    display: none;
+  }
+
+  .feedback-box.show { display:block; animation: fadeIn 0.3s ease; }
+  .feedback-box.wrong-fb { background: rgba(185,28,28,0.08); border-color: rgba(185,28,28,0.3); }
+
+  .feedback-box h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--green-light);
+    margin-bottom: 6px;
+  }
+
+  .feedback-box.wrong-fb h4 { color: #f87171; }
+  .feedback-box p { font-size: 14px; line-height: 1.6; }
+
+  .question-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 12px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+  }
+
+  .btn-gold {
+    background: var(--gold);
+    color: var(--navy);
+  }
+
+  .btn-gold:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+  }
+
+  .btn-outline:hover { background: rgba(201,162,39,0.1); }
+
+  .btn-green {
+    background: var(--green);
+    color: var(--white);
+  }
+
+  .btn-green:hover { background: var(--green-light); }
+
+  /* SIMULADO */
+  .simulado-start {
+    text-align: center;
+    padding: 60px 24px;
+  }
+
+  .simulado-start h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--gold);
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+  }
+
+  .simulado-start p {
+    color: var(--gray);
+    font-size: 15px;
+    max-width: 480px;
+    margin: 0 auto 32px;
+    line-height: 1.6;
+  }
+
+  .simulado-info-grid {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-bottom: 32px;
+  }
+
+  .sim-info {
+    text-align: center;
+  }
+
+  .sim-info .num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    color: var(--gold);
+    line-height:1;
+  }
+
+  .sim-info .lbl {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+  }
+
+  /* TIMER */
+  .timer-bar {
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .timer-display {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--gold);
+    letter-spacing: 3px;
+  }
+
+  .score-live {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--gray);
+  }
+
+  .score-live span { color: var(--gold); }
+
+  /* RESULTADO */
+  .result-screen {
+    text-align: center;
+    padding: 48px 24px;
+  }
+
+  .result-badge {
+    font-size: 64px;
+    margin-bottom: 16px;
+  }
+
+  .result-screen h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+  }
+
+  .result-pct {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    line-height:1;
+  }
+
+  .result-grid {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 24px 0 32px;
+  }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--gold);
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+
+  .section-sub {
+    font-size: 13px;
+    color: var(--gray);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+  }
+
+  /* FILTER TABS */
+  .filter-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .filter-tab {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--gray);
+    transition: all 0.15s;
+  }
+
+  .filter-tab:hover { color: var(--white); border-color: rgba(201,162,39,0.4); }
+  .filter-tab.active { background: var(--gold); color: var(--navy); border-color: var(--gold); font-weight:700; }
+
+  /* ACCORDION */
+  .accordion { margin-bottom: 8px; }
+
+  .accordion-header {
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    letter-spacing: 1px;
+    color: var(--white);
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .accordion-header:hover { border-color: rgba(201,162,39,0.4); }
+  .accordion-header.open { border-color: var(--gold); border-bottom-left-radius:0; border-bottom-right-radius:0; }
+
+  .accordion-body {
+    background: rgba(10,22,40,0.6);
+    border: 1px solid var(--gold);
+    border-top: none;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    padding: 20px;
+    display: none;
+  }
+
+  .accordion-body.open { display:block; animation: fadeIn 0.2s; }
+
+  /* PROGRESS PAGE */
+  .progress-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .prog-card {
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  .prog-card h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 10px;
+  }
+
+  .prog-subject { font-size: 15px; font-weight: 600; color: var(--white); margin-bottom: 8px; }
+
+  .prog-bar-wrap { height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow:hidden; margin-bottom: 6px; }
+  .prog-bar-fill { height:100%; border-radius:3px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+  .prog-pct { font-size: 12px; color: var(--gold); font-family: 'Barlow Condensed', sans-serif; }
+
+  .history-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .history-table th {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+    padding: 10px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .history-table td {
+    padding: 12px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .history-table tr:hover td { background: rgba(201,162,39,0.04); }
+
+  /* RANK */
+  .rank-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(201,162,39,0.1);
+    border: 1px solid rgba(201,162,39,0.3);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  /* MOBILE */
+  @media(max-width:600px) {
+    .header-inner { padding: 10px 16px; }
+    .header-title h1 { font-size: 20px; }
+    .simulado-info-grid { gap: 20px; }
+    .result-pct { font-size: 60px; }
+    main { padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-emblem">FN</div>
+    <h2>ACESSO RESTRITO</h2>
+    <p>Preparatório Fuzileiro Naval</p>
+    <div class="login-input-wrap">
+      <input class="login-input" type="password" id="pwInput" placeholder="Digite a senha" onkeydown="if(event.key==='Enter')checkLogin()">
+      <button class="toggle-pw" onclick="togglePw()" title="Mostrar/ocultar senha">👁</button>
+    </div>
+    <button class="login-btn" onclick="checkLogin()">▶ ENTRAR</button>
+    <div class="login-error" id="loginError">⚠ Senha incorreta. Tente novamente.</div>
+    <div class="login-hint">🔒 Área protegida por senha</div>
+  </div>
+</div>
+
+<!-- APP CONTENT -->
+<div id="appContent">
+
+<header>
+  <div class="header-inner">
+    <div class="logo-emblem">FN</div>
+    <div class="header-title">
+      <h1>FUZILEIRO NAVAL</h1>
+      <p>Preparatório para Concurso · Marinha do Brasil</p>
+    </div>
+    <div class="progress-bar-wrap">
+      <span class="xp-label" id="xpLabel">XP: 0 / 500</span>
+      <div class="progress-bar">
+        <div class="progress-fill" id="xpFill" style="width:0%"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="nav-inner">
+    <button class="nav-btn active" onclick="showSection('dashboard',this)">🏠 Início</button>
+    <button class="nav-btn" onclick="showSection('teoria',this)">📚 Teoria</button>
+    <button class="nav-btn" onclick="showSection('exercicios',this)">✏️ Exercícios</button>
+    <button class="nav-btn" onclick="showSection('simulado',this)">🎯 Simulado</button>
+    <button class="nav-btn" onclick="showSection('progresso',this)">📊 Progresso</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- DASHBOARD -->
+<div class="section active" id="dashboard">
+  <div class="welcome-banner">
+    <h2>BEM-VINDO, RECRUTA!</h2>
+    <p>Sua plataforma completa para o Concurso de Fuzileiro Naval. Estude teoria, pratique exercícios e faça simulados reais. A disciplina é o caminho para a aprovação.</p>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-number" id="stat-questoes">0</div>
+      <div class="stat-label">Questões Respondidas</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="stat-acertos">0%</div>
+      <div class="stat-label">Taxa de Acerto</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="stat-simulados">0</div>
+      <div class="stat-label">Simulados Realizados</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" id="stat-topicos">0</div>
+      <div class="stat-label">Tópicos Estudados</div>
+    </div>
+  </div>
+  <div style="font-family:'Barlow Condensed';font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;">Módulos de Estudo</div>
+  <div class="modules-grid">
+    <div class="module-card" onclick="showSection('teoria',document.querySelectorAll('.nav-btn')[1]); setTopic('mat','basica')">
+      <div class="module-icon">🔢</div>
+      <div class="module-title">Matemática</div>
+      <div class="module-desc">Aritmética, álgebra, geometria, porcentagem, razão e proporção, equações e muito mais.</div>
+      <div class="module-progress">
+        <div class="bar"><div class="fill" id="pMat" style="width:0%"></div></div>
+        <span id="pMatTxt">0%</span>
+      </div>
+    </div>
+    <div class="module-card" onclick="showSection('teoria',document.querySelectorAll('.nav-btn')[1]); setTopic('port','ortografia')">
+      <div class="module-icon">📝</div>
+      <div class="module-title">Português</div>
+      <div class="module-desc">Ortografia, gramática, interpretação de texto, morfologia, sintaxe e redação.</div>
+      <div class="module-progress">
+        <div class="bar"><div class="fill" id="pPort" style="width:0%"></div></div>
+        <span id="pPortTxt">0%</span>
+      </div>
+    </div>
+    <div class="module-card" onclick="showSection('exercicios',document.querySelectorAll('.nav-btn')[2])">
+      <div class="module-icon">✏️</div>
+      <div class="module-title">Exercícios</div>
+      <div class="module-desc">200+ questões gabaritadas com explicação detalhada de cada resposta.</div>
+      <div class="module-progress">
+        <div class="bar"><div class="fill" style="width:0%"></div></div>
+        <span>0%</span>
+      </div>
+    </div>
+    <div class="module-card" onclick="showSection('simulado',document.querySelectorAll('.nav-btn')[3])">
+      <div class="module-icon">🎯</div>
+      <div class="module-title">Simulado Completo</div>
+      <div class="module-desc">Prova no estilo real do concurso com timer e gabarito ao final.</div>
+      <div class="module-progress">
+        <div class="bar"><div class="fill" style="width:0%"></div></div>
+        <span>0%</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TEORIA -->
+<div class="section" id="teoria">
+  <div class="section-title">TEORIA</div>
+  <div class="section-sub">Conteúdo completo conforme o edital</div>
+  <div class="filter-tabs">
+    <button class="filter-tab active" onclick="switchSubject('mat',this)">Matemática</button>
+    <button class="filter-tab" onclick="switchSubject('port',this)">Português</button>
+  </div>
+  <div class="theory-layout">
+    <div class="sidebar">
+      <div class="sidebar-title" id="sidebarTitle">Matemática</div>
+      <ul class="topic-list" id="topicList"></ul>
+    </div>
+    <div class="content-panel">
+      <h2 id="theoryTitle">Selecione um tópico</h2>
+      <p class="subtitle" id="theorySubtitle">Escolha um tópico ao lado para começar</p>
+      <div class="theory-text" id="theoryContent">
+        <p>Selecione um tópico na lista lateral para visualizar o conteúdo teórico.</p>
+      </div>
+      <div class="nav-theory">
+        <button class="btn btn-outline" onclick="prevTopic()">← Anterior</button>
+        <button class="btn btn-gold" onclick="markTopicDone()">✓ Marcar como Estudado</button>
+        <button class="btn btn-outline" onclick="nextTopic()">Próximo →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXERCÍCIOS -->
+<div class="section" id="exercicios">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:8px;">
+    <div>
+      <div class="section-title">EXERCÍCIOS</div>
+      <div class="section-sub">Questões gabaritadas com explicação</div>
+    </div>
+    <div class="rank-badge">⭐ <span id="rankLabel">Recruta</span></div>
+  </div>
+  <div class="filter-tabs">
+    <button class="filter-tab active" onclick="filterQ('all',this)">Todas</button>
+    <button class="filter-tab" onclick="filterQ('mat',this)">Matemática</button>
+    <button class="filter-tab" onclick="filterQ('port',this)">Português</button>
+    <button class="filter-tab" onclick="filterQ('facil',this)">Fácil</button>
+    <button class="filter-tab" onclick="filterQ('medio',this)">Médio</button>
+    <button class="filter-tab" onclick="filterQ('dificil',this)">Difícil</button>
+  </div>
+  <div class="timer-bar">
+    <div>
+      <div style="font-family:'Barlow Condensed';font-size:11px;letter-spacing:2px;color:var(--gray);margin-bottom:2px;">QUESTÃO</div>
+      <div class="question-counter" id="qCounter">1 / 20</div>
+    </div>
+    <div class="score-live">Acertos: <span id="scoreLive">0</span> | Erros: <span id="errorsLive">0</span></div>
+  </div>
+  <div class="question-box" id="questionBox">
+    <div class="question-header">
+      <div class="question-meta" id="questionMeta"></div>
+    </div>
+    <div class="question-text" id="questionText"></div>
+    <ul class="options-list" id="optionsList"></ul>
+    <div class="feedback-box" id="feedbackBox">
+      <h4 id="feedbackTitle">Resposta Correta!</h4>
+      <p id="feedbackText"></p>
+    </div>
+  </div>
+  <div class="question-actions">
+    <button class="btn btn-gold" id="nextQBtn" onclick="nextQuestion()" style="display:none">Próxima Questão →</button>
+    <button class="btn btn-outline" onclick="shuffleQuestions()">🔀 Embaralhar</button>
+  </div>
+</div>
+
+<!-- SIMULADO -->
+<div class="section" id="simulado">
+  <div id="simStart">
+    <div class="simulado-start">
+      <div style="font-size:64px;margin-bottom:16px;">🎯</div>
+      <h2>SIMULADO COMPLETO</h2>
+      <p>Teste seus conhecimentos com questões no estilo real do concurso de Fuzileiro Naval. Você terá 60 minutos para responder 20 questões de Matemática e Português.</p>
+      <div class="simulado-info-grid">
+        <div class="sim-info"><div class="num">20</div><div class="lbl">Questões</div></div>
+        <div class="sim-info"><div class="num">60</div><div class="lbl">Minutos</div></div>
+        <div class="sim-info"><div class="num">70%</div><div class="lbl">Para Aprovação</div></div>
+      </div>
+      <button class="btn btn-gold" style="font-size:16px;padding:16px 48px;" onclick="startSimulado()">▶ INICIAR SIMULADO</button>
+    </div>
+  </div>
+  <div id="simProgress" style="display:none">
+    <div class="timer-bar">
+      <div>
+        <div style="font-family:'Barlow Condensed';font-size:11px;letter-spacing:2px;color:var(--gray);margin-bottom:2px;">TEMPO RESTANTE</div>
+        <div class="timer-display" id="simTimer">60:00</div>
+      </div>
+      <div style="text-align:right">
+        <div class="score-live">Questão <span id="simQNum">1</span> de <span id="simQTotal">20</span></div>
+        <div style="margin-top:4px">
+          <div class="progress-bar" style="width:200px">
+            <div class="progress-fill" id="simProgress2" style="width:5%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="question-box" id="simQuestionBox">
+      <div class="question-header">
+        <div class="question-meta" id="simQMeta"></div>
+      </div>
+      <div class="question-text" id="simQText"></div>
+      <ul class="options-list" id="simOptions"></ul>
+    </div>
+    <div class="question-actions">
+      <button class="btn btn-gold" id="simNextBtn" onclick="simNext()" style="display:none">Próxima →</button>
+      <button class="btn btn-outline" style="color:var(--red);border-color:var(--red)" onclick="if(confirm('Encerrar simulado?'))finishSimulado()">Encerrar</button>
+    </div>
+  </div>
+  <div id="simResult" style="display:none">
+    <div class="result-screen">
+      <div class="result-badge" id="resultBadge">🏅</div>
+      <h2 id="resultTitle" style="color:var(--gold)">RESULTADO</h2>
+      <div class="result-pct" id="resultPct" style="color:var(--gold)">0%</div>
+      <div class="result-grid" id="resultGrid"></div>
+      <button class="btn btn-gold" style="font-size:15px;padding:14px 40px;" onclick="resetSimulado()">🔄 Novo Simulado</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESSO -->
+<div class="section" id="progresso">
+  <div class="section-title">SEU PROGRESSO</div>
+  <div class="section-sub">Acompanhe sua evolução nos estudos</div>
+  <div class="progress-grid">
+    <div class="prog-card">
+      <h4>Matemática</h4>
+      <div class="prog-subject">Aritmética</div>
+      <div class="prog-bar-wrap"><div class="prog-bar-fill" id="pb1" style="width:0%"></div></div>
+      <div class="prog-pct" id="pp1">0%</div>
+    </div>
+    <div class="prog-card">
+      <h4>Matemática</h4>
+      <div class="prog-subject">Álgebra</div>
+      <div class="prog-bar-wrap"><div class="prog-bar-fill" id="pb2" style="width:0%"></div></div>
+      <div class="prog-pct" id="pp2">0%</div>
+    </div>
+    <div class="prog-card">
+      <h4>Matemática</h4>
+      <div class="prog-subject">Geometria</div>
+      <div class="prog-bar-wrap"><div class="prog-bar-fill" id="pb3" style="width:0%"></div></div>
+      <div class="prog-pct" id="pp3">0%</div>
+    </div>
+    <div class="prog-card">
+      <h4>Português</h4>
+      <div class="prog-subject">Gramática</div>
+      <div class="prog-bar-wrap"><div class="prog-bar-fill" id="pb4" style="width:0%"></div></div>
+      <div class="prog-pct" id="pp4">0%</div>
+    </div>
+    <div class="prog-card">
+      <h4>Português</h4>
+      <div class="prog-subject">Interpretação</div>
+      <div class="prog-bar-wrap"><div class="prog-bar-fill" id="pb5" style="width:0%"></div></div>
+      <div class="prog-pct" id="pp5">0%</div>
+    </div>
+    <div class="prog-card">
+      <h4>Simulados</h4>
+      <div class="prog-subject">Performance Geral</div>
+      <div class="prog-bar-wrap"><div class="prog-bar-fill" id="pb6" style="width:0%"></div></div>
+      <div class="prog-pct" id="pp6">0%</div>
+    </div>
+  </div>
+  <div style="font-family:'Barlow Condensed';font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;">Histórico de Simulados</div>
+  <div style="background:var(--navy-mid);border:1px solid var(--border);border-radius:8px;overflow:auto;">
+    <table class="history-table">
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Questões</th>
+          <th>Acertos</th>
+          <th>Nota</th>
+          <th>Resultado</th>
+        </tr>
+      </thead>
+      <tbody id="historyBody">
+        <tr><td colspan="5" style="text-align:center;color:var(--gray);padding:32px">Nenhum simulado realizado ainda.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</main>
+
+<script>
+// ===================== DATA =====================
+
+const TOPICS = {
+  mat: [
+    { id:'basica', label:'Números Naturais e Inteiros' },
+    { id:'fracoes', label:'Frações e Decimais' },
+    { id:'porcent', label:'Porcentagem' },
+    { id:'razao', label:'Razão e Proporção' },
+    { id:'regra3', label:'Regra de Três' },
+    { id:'equacao1', label:'Equações do 1º Grau' },
+    { id:'equacao2', label:'Equações do 2º Grau' },
+    { id:'geometria', label:'Geometria Plana' },
+    { id:'geo3d', label:'Geometria Espacial' },
+    { id:'estatistica', label:'Estatística Básica' },
+  ],
+  port: [
+    { id:'ortografia', label:'Ortografia e Acentuação' },
+    { id:'morfologia', label:'Morfologia' },
+    { id:'sintaxe', label:'Sintaxe' },
+    { id:'concordancia', label:'Concordância' },
+    { id:'regencia', label:'Regência Verbal e Nominal' },
+    { id:'interpretacao', label:'Interpretação de Texto' },
+    { id:'coesao', label:'Coesão e Coerência' },
+    { id:'redacao', label:'Redação Oficial' },
+  ]
+};
+
+const THEORY = {
+  basica: {
+    title: 'Números Naturais e Inteiros',
+    subtitle: 'Fundamentos da Aritmética | Matemática',
+    content: `
+      <h3>Números Naturais (ℕ)</h3>
+      <p>Os números naturais são: 0, 1, 2, 3, 4, 5, ... São usados para contar e ordenar objetos. O conjunto é representado por ℕ = {0, 1, 2, 3, ...}.</p>
+      <div class="formula-box">ℕ = {0, 1, 2, 3, 4, 5, ...} → Infinito e sem negativos</div>
+      <h3>Operações Fundamentais</h3>
+      <p><strong>Adição (+):</strong> Juntar quantidades. Ex.: 15 + 7 = 22</p>
+      <p><strong>Subtração (−):</strong> Retirar quantidades. Ex.: 20 − 8 = 12</p>
+      <p><strong>Multiplicação (×):</strong> Adição repetida. Ex.: 6 × 4 = 24</p>
+      <p><strong>Divisão (÷):</strong> Repartir igualmente. Ex.: 36 ÷ 9 = 4</p>
+      <h3>Números Inteiros (ℤ)</h3>
+      <p>Incluem os naturais e seus opostos negativos: ..., −3, −2, −1, 0, 1, 2, 3, ...</p>
+      <div class="formula-box">ℤ = {..., −3, −2, −1, 0, 1, 2, 3, ...}</div>
+      <h3>Regras de Sinais</h3>
+      <p>Na multiplicação e divisão de inteiros, os sinais seguem a regra:</p>
+      <ul>
+        <li>(+) × (+) = (+) &nbsp;&nbsp; Ex.: 3 × 4 = 12</li>
+        <li>(−) × (−) = (+) &nbsp;&nbsp; Ex.: (−3) × (−4) = 12</li>
+        <li>(+) × (−) = (−) &nbsp;&nbsp; Ex.: 3 × (−4) = −12</li>
+        <li>(−) × (+) = (−) &nbsp;&nbsp; Ex.: (−3) × 4 = −12</li>
+      </ul>
+      <div class="tip-box"><strong>💡 Dica para prova:</strong> Sinais iguais = positivo. Sinais diferentes = negativo. Memorize essa regra!</div>
+      <h3>Divisibilidade</h3>
+      <p>Critérios importantes para o concurso:</p>
+      <ul>
+        <li><strong>Divisível por 2:</strong> termina em 0, 2, 4, 6 ou 8</li>
+        <li><strong>Divisível por 3:</strong> soma dos dígitos divisível por 3</li>
+        <li><strong>Divisível por 5:</strong> termina em 0 ou 5</li>
+        <li><strong>Divisível por 10:</strong> termina em 0</li>
+      </ul>
+      <div class="tip-box"><strong>💡 Exemplo:</strong> 234 é divisível por 2 (termina em 4) e por 3 (2+3+4=9, divisível por 3), logo também por 6.</div>
+    `
+  },
+  fracoes: {
+    title: 'Frações e Decimais',
+    subtitle: 'Números Racionais | Matemática',
+    content: `
+      <h3>O que é uma fração?</h3>
+      <p>Uma fração representa uma parte de um todo. É escrita na forma a/b, onde <strong>a</strong> é o numerador e <strong>b</strong> o denominador.</p>
+      <div class="formula-box">a/b → a = numerador (parte) | b = denominador (todo)</div>
+      <h3>Operações com Frações</h3>
+      <p><strong>Adição e Subtração:</strong> Denominadores iguais → soma/subtrai numeradores. Denominadores diferentes → achar o MMC.</p>
+      <div class="formula-box">1/4 + 2/4 = 3/4 &nbsp;&nbsp;|&nbsp;&nbsp; 1/3 + 1/4 = 4/12 + 3/12 = 7/12</div>
+      <p><strong>Multiplicação:</strong> Multiplica numerador com numerador e denominador com denominador.</p>
+      <div class="formula-box">2/3 × 3/5 = (2×3)/(3×5) = 6/15 = 2/5</div>
+      <p><strong>Divisão:</strong> Multiplica pelo inverso (fração invertida).</p>
+      <div class="formula-box">2/3 ÷ 4/5 = 2/3 × 5/4 = 10/12 = 5/6</div>
+      <h3>Números Decimais</h3>
+      <p>Frações com denominador 10, 100, 1000... podem ser escritas como decimais:</p>
+      <ul>
+        <li>1/10 = 0,1</li>
+        <li>1/4 = 25/100 = 0,25</li>
+        <li>3/5 = 6/10 = 0,6</li>
+      </ul>
+      <div class="tip-box"><strong>💡 Dica:</strong> Para converter fração em decimal, divida o numerador pelo denominador. Ex.: 3/8 = 3 ÷ 8 = 0,375</div>
+      <h3>MMC e MDC</h3>
+      <p><strong>MMC</strong> (Mínimo Múltiplo Comum): menor número divisível pelos dois. Essencial para somar frações.</p>
+      <p><strong>MDC</strong> (Máximo Divisor Comum): maior divisor comum. Usado para simplificar frações.</p>
+      <div class="formula-box">MMC(4,6) = 12 &nbsp;&nbsp;|&nbsp;&nbsp; MDC(12,8) = 4</div>
+    `
+  },
+  porcent: {
+    title: 'Porcentagem',
+    subtitle: 'Cálculo Percentual | Matemática',
+    content: `
+      <h3>Conceito</h3>
+      <p>Porcentagem significa "por cem". Representa uma razão com denominador 100.</p>
+      <div class="formula-box">x% = x/100 &nbsp;&nbsp;|&nbsp;&nbsp; 35% = 35/100 = 0,35</div>
+      <h3>Cálculo de Porcentagem</h3>
+      <p><strong>Encontrar x% de N:</strong></p>
+      <div class="formula-box">Valor = (x/100) × N &nbsp;&nbsp;|&nbsp;&nbsp; Ex.: 20% de 500 = (20/100) × 500 = 100</div>
+      <h3>Aumento e Desconto</h3>
+      <p><strong>Aumento de x%:</strong> multiplica por (1 + x/100)</p>
+      <div class="formula-box">Aumento 30%: N × 1,30 &nbsp;&nbsp;|&nbsp;&nbsp; Ex.: 200 + 30% = 200 × 1,30 = 260</div>
+      <p><strong>Desconto de x%:</strong> multiplica por (1 − x/100)</p>
+      <div class="formula-box">Desconto 15%: N × 0,85 &nbsp;&nbsp;|&nbsp;&nbsp; Ex.: 200 − 15% = 200 × 0,85 = 170</div>
+      <h3>Porcentagem Inversa</h3>
+      <p>Dado o valor final e a porcentagem, encontrar o original:</p>
+      <div class="formula-box">Original = Valor final ÷ (1 ± x/100)</div>
+      <div class="tip-box"><strong>💡 Dica de concurso:</strong> Aumentos e descontos sucessivos NÃO se somam! Ex.: +10% e −10% não voltam ao valor original: 100 → 110 → 99.</div>
+    `
+  },
+  razao: {
+    title: 'Razão e Proporção',
+    subtitle: 'Matemática Fundamental | Matemática',
+    content: `
+      <h3>Razão</h3>
+      <p>Razão é a comparação entre dois valores por divisão.</p>
+      <div class="formula-box">Razão de a para b = a/b ou a:b</div>
+      <h3>Proporção</h3>
+      <p>Proporção é a igualdade entre duas razões.</p>
+      <div class="formula-box">a/b = c/d ↔ a×d = b×c (produto dos meios = produto dos extremos)</div>
+      <h3>Grandezas Diretamente Proporcionais</h3>
+      <p>Quando uma aumenta, a outra aumenta na mesma proporção.</p>
+      <div class="formula-box">Ex.: 3 workers → 6 days | 6 workers → 3 days (inversa) | 3 workers → 9 days (direta: mais dias)</div>
+      <h3>Divisão Proporcional</h3>
+      <p>Dividir um total em partes proporcionais a valores dados.</p>
+      <div class="formula-box">Total 300 em proporção 2:3:5 → partes: 60, 90, 150 (soma das partes = 10, cada parte = 300/10)</div>
+      <div class="tip-box"><strong>💡 Dica:</strong> Sempre some as partes da proporção para encontrar o divisor. Depois multiplique cada parte pelo quociente.</div>
+    `
+  },
+  regra3: {
+    title: 'Regra de Três',
+    subtitle: 'Resolução de Problemas | Matemática',
+    content: `
+      <h3>Regra de Três Simples</h3>
+      <p>Resolve problemas com duas grandezas proporcionais (direta ou inversa).</p>
+      <div class="formula-box">
+        Se 4 cadernos custam R$20, quanto custam 10?<br>
+        4 → 20<br>
+        10 → x<br>
+        x = (10 × 20) / 4 = R$50
+      </div>
+      <h3>Grandezas Inversamente Proporcionais</h3>
+      <p>Se aumentar uma diminui a outra, inverta a segunda coluna na proporção.</p>
+      <div class="formula-box">
+        5 operários terminam obra em 12 dias. Em 4 dias, quantos operários?<br>
+        5 → 12 (inversa: troca os lados)<br>
+        x → 4<br>
+        x = (5 × 12) / 4 = 15 operários
+      </div>
+      <h3>Regra de Três Composta</h3>
+      <p>Envolve mais de duas grandezas. Monte a tabela com todas as relações.</p>
+      <div class="formula-box">
+        3 torneiras enchem 2 tanques em 4h. Quantas horas para 5 torneiras encherem 6 tanques?<br>
+        Torneiras (inversa): 3/5 | Tanques (direta): 6/2<br>
+        x = 4 × (3/5) × (6/2) = 4 × 0,6 × 3 = 7,2h
+      </div>
+      <div class="tip-box"><strong>💡 Dica:</strong> Identifique se cada grandeza é direta ou inversa em relação ao que você quer achar, antes de montar o cálculo.</div>
+    `
+  },
+  equacao1: {
+    title: 'Equações do 1º Grau',
+    subtitle: 'Álgebra | Matemática',
+    content: `
+      <h3>Definição</h3>
+      <p>Uma equação do 1º grau tem a forma ax + b = 0, onde a ≠ 0.</p>
+      <div class="formula-box">ax + b = 0 → solução: x = −b/a</div>
+      <h3>Resolvendo Equações</h3>
+      <p>Isole a incógnita (x) no lado esquerdo, passando os outros termos para o lado direito com sinal trocado.</p>
+      <div class="formula-box">
+        3x − 9 = 0<br>
+        3x = 9<br>
+        x = 9/3 = 3
+      </div>
+      <div class="formula-box">
+        2x + 5 = 13<br>
+        2x = 13 − 5<br>
+        2x = 8<br>
+        x = 4
+      </div>
+      <h3>Problemas com Equações</h3>
+      <p>Transforme o enunciado em equação. Identifique o que é desconhecido (x) e as relações entre os dados.</p>
+      <div class="formula-box">
+        "A idade de João é o dobro da de Maria. A soma é 30." → J = 2M, J+M = 30<br>
+        2M + M = 30 → 3M = 30 → M = 10 → J = 20
+      </div>
+      <div class="tip-box"><strong>💡 Dica:</strong> Após encontrar x, sempre substitua na equação original para verificar.</div>
+    `
+  },
+  equacao2: {
+    title: 'Equações do 2º Grau',
+    subtitle: 'Álgebra Avançada | Matemática',
+    content: `
+      <h3>Forma Geral</h3>
+      <div class="formula-box">ax² + bx + c = 0, com a ≠ 0</div>
+      <h3>Fórmula de Bhaskara</h3>
+      <div class="formula-box">x = (−b ± √Δ) / 2a &nbsp;&nbsp;|&nbsp;&nbsp; Δ = b² − 4ac</div>
+      <h3>Análise do Discriminante (Δ)</h3>
+      <ul>
+        <li><strong>Δ &gt; 0:</strong> Duas raízes reais e distintas</li>
+        <li><strong>Δ = 0:</strong> Uma raiz real (dupla)</li>
+        <li><strong>Δ &lt; 0:</strong> Sem raízes reais</li>
+      </ul>
+      <h3>Exemplo Resolvido</h3>
+      <div class="formula-box">
+        x² − 5x + 6 = 0 (a=1, b=−5, c=6)<br>
+        Δ = 25 − 24 = 1<br>
+        x = (5 ± 1)/2<br>
+        x₁ = 3 | x₂ = 2
+      </div>
+      <h3>Relações de Girard</h3>
+      <div class="formula-box">Soma: x₁ + x₂ = −b/a &nbsp;&nbsp;|&nbsp;&nbsp; Produto: x₁ × x₂ = c/a</div>
+      <div class="tip-box"><strong>💡 Dica:</strong> Se a soma e o produto das raízes forem fornecidos, use as Relações de Girard para achar a equação diretamente, sem Bhaskara.</div>
+    `
+  },
+  geometria: {
+    title: 'Geometria Plana',
+    subtitle: 'Figuras Planas e Áreas | Matemática',
+    content: `
+      <h3>Triângulos</h3>
+      <div class="formula-box">Área = (base × altura) / 2 &nbsp;&nbsp;|&nbsp;&nbsp; Soma dos ângulos internos = 180°</div>
+      <h3>Quadriláteros</h3>
+      <div class="formula-box">
+        Quadrado: A = l² | P = 4l<br>
+        Retângulo: A = b × h | P = 2(b+h)<br>
+        Paralelogramo: A = b × h<br>
+        Trapézio: A = [(B+b) × h] / 2
+      </div>
+      <h3>Círculo</h3>
+      <div class="formula-box">Área = π × r² &nbsp;&nbsp;|&nbsp;&nbsp; Comprimento = 2π × r &nbsp;&nbsp;|&nbsp;&nbsp; π ≈ 3,14</div>
+      <h3>Teorema de Pitágoras</h3>
+      <div class="formula-box">Em triângulo retângulo: a² = b² + c² (a = hipotenusa, b e c = catetos)</div>
+      <div class="tip-box"><strong>💡 Triângulos notáveis:</strong><br>
+      3-4-5: 3²+4²=5² ✓ &nbsp;&nbsp; 5-12-13: 5²+12²=13² ✓ &nbsp;&nbsp; 8-15-17: 8²+15²=17² ✓</div>
+    `
+  },
+  geo3d: {
+    title: 'Geometria Espacial',
+    subtitle: 'Sólidos e Volumes | Matemática',
+    content: `
+      <h3>Cubo</h3>
+      <div class="formula-box">Volume = a³ &nbsp;&nbsp;|&nbsp;&nbsp; Área total = 6a² &nbsp;&nbsp;|&nbsp;&nbsp; Diagonal = a√3</div>
+      <h3>Paralelepípedo (Caixa)</h3>
+      <div class="formula-box">Volume = c × l × h &nbsp;&nbsp;|&nbsp;&nbsp; Área total = 2(cl + ch + lh)</div>
+      <h3>Cilindro</h3>
+      <div class="formula-box">Volume = π × r² × h &nbsp;&nbsp;|&nbsp;&nbsp; Área lateral = 2π × r × h</div>
+      <h3>Cone</h3>
+      <div class="formula-box">Volume = (1/3) × π × r² × h &nbsp;&nbsp;|&nbsp;&nbsp; Área lateral = π × r × g (g = geratriz)</div>
+      <h3>Esfera</h3>
+      <div class="formula-box">Volume = (4/3) × π × r³ &nbsp;&nbsp;|&nbsp;&nbsp; Área = 4π × r²</div>
+      <div class="tip-box"><strong>💡 Dica:</strong> Cone e pirâmide têm volume = 1/3 do prisma correspondente. Memorize esse fator!</div>
+    `
+  },
+  estatistica: {
+    title: 'Estatística Básica',
+    subtitle: 'Análise de Dados | Matemática',
+    content: `
+      <h3>Média Aritmética</h3>
+      <div class="formula-box">Média = (x₁ + x₂ + ... + xₙ) / n</div>
+      <h3>Mediana</h3>
+      <p>Valor central de um conjunto ordenado. Se n é par, é a média dos dois centrais.</p>
+      <div class="formula-box">
+        {2, 4, 6, 8, 10} → Mediana = 6 (posição central)<br>
+        {2, 4, 6, 8} → Mediana = (4+6)/2 = 5
+      </div>
+      <h3>Moda</h3>
+      <p>Valor que mais se repete. Pode haver mais de uma moda ou nenhuma.</p>
+      <div class="formula-box">{3, 3, 5, 7, 7, 7, 9} → Moda = 7 (aparece 3 vezes)</div>
+      <h3>Porcentagem em Gráficos</h3>
+      <p>Em gráficos de pizza: soma = 100%. Em barras/colunas: leia diretamente o valor do eixo.</p>
+      <div class="tip-box"><strong>💡 Dica:</strong> Questões de concurso frequentemente pedem média ponderada. Multiplique cada nota pelo peso antes de somar.</div>
+    `
+  },
+  ortografia: {
+    title: 'Ortografia e Acentuação',
+    subtitle: 'Norma Culta | Português',
+    content: `
+      <h3>Uso de S, Z, SS, Ç</h3>
+      <ul>
+        <li><strong>SS:</strong> Entre vogais, som de /s/ forte: <em>passa, massa, cassino</em></li>
+        <li><strong>Ç:</strong> Antes de a, o, u com som /s/: <em>ação, açúcar, exceção</em></li>
+        <li><strong>Z:</strong> Nomes próprios e derivados: <em>Portugal → português</em></li>
+        <li><strong>S:</strong> Após ditongos: <em>coisa, pois, causa</em></li>
+      </ul>
+      <h3>Uso de X e CH</h3>
+      <ul>
+        <li><strong>X</strong> após ditongo: <em>caixa, peixe, faixa</em></li>
+        <li><strong>X</strong> após "en": <em>enxergar, enxame, enxofre</em></li>
+        <li><strong>X</strong> de origem indígena ou africana: <em>xará, xingamento</em></li>
+      </ul>
+      <h3>Acentuação Gráfica</h3>
+      <p><strong>Oxítonas:</strong> Acentuadas quando terminam em a(s), e(s), o(s), em, ens: <em>café, avó, ninguém</em></p>
+      <p><strong>Paroxítonas:</strong> Acentuadas quando NÃO terminam em a(s), e(s), o(s), em, ens: <em>fácil, bônus, tórax</em></p>
+      <p><strong>Proparoxítonas:</strong> Sempre acentuadas: <em>médico, lâmpada, público</em></p>
+      <div class="tip-box"><strong>💡 Dica:</strong> Paroxítonas são a maioria no português. Se termina em vogal simples sem acento, geralmente é paroxítona tônica normal (casa, vela, bolo).</div>
+    `
+  },
+  morfologia: {
+    title: 'Morfologia',
+    subtitle: 'Classes de Palavras | Português',
+    content: `
+      <h3>As 10 Classes Gramaticais</h3>
+      <ul>
+        <li><strong>Substantivo:</strong> nomeia seres (pessoa, lugar, coisa): <em>soldado, mar, coragem</em></li>
+        <li><strong>Artigo:</strong> determina o substantivo: <em>o, a, os, as, um, uma</em></li>
+        <li><strong>Adjetivo:</strong> qualifica o substantivo: <em>valente, forte, disciplinado</em></li>
+        <li><strong>Numeral:</strong> indica quantidade ou ordem: <em>dois, primeiro, triplo</em></li>
+        <li><strong>Pronome:</strong> substitui ou acompanha o substantivo: <em>eu, ele, meu, este</em></li>
+        <li><strong>Verbo:</strong> indica ação, estado ou fenômeno: <em>correr, ser, chover</em></li>
+        <li><strong>Advérbio:</strong> modifica verbo, adjetivo ou outro advérbio: <em>rapidamente, muito, não</em></li>
+        <li><strong>Preposição:</strong> liga palavras: <em>de, em, para, com, por, a</em></li>
+        <li><strong>Conjunção:</strong> liga orações: <em>e, mas, porém, porque, quando</em></li>
+        <li><strong>Interjeição:</strong> expressa emoção: <em>Oba!, Atenção!, Silêncio!</em></li>
+      </ul>
+      <div class="tip-box"><strong>💡 Dica de concurso:</strong> Foque especialmente nos PRONOMES e VERBOS — são os mais cobrados. Conjugação verbal, pronomes pessoais oblíquos e possessivos são frequentes.</div>
+    `
+  },
+  sintaxe: {
+    title: 'Sintaxe',
+    subtitle: 'Análise Sintática | Português',
+    content: `
+      <h3>Termos Essenciais da Oração</h3>
+      <p><strong>Sujeito:</strong> de quem se fala. Pode ser simples, composto, oculto ou indeterminado.</p>
+      <p><strong>Predicado:</strong> o que se diz do sujeito. Verbal, nominal ou verbo-nominal.</p>
+      <div class="formula-box">O fuzileiro [sujeito] realizou a missão com êxito [predicado verbal].</div>
+      <h3>Termos Integrantes</h3>
+      <ul>
+        <li><strong>Objeto direto:</strong> complemento sem preposição obrigatória: <em>Ele viu o inimigo.</em></li>
+        <li><strong>Objeto indireto:</strong> complemento com preposição: <em>Gostou da missão.</em></li>
+        <li><strong>Complemento nominal:</strong> complementa substantivo/adjetivo: <em>Tinha certeza da vitória.</em></li>
+      </ul>
+      <h3>Termos Acessórios</h3>
+      <ul>
+        <li><strong>Adjunto adnominal:</strong> modifica substantivo: <em>O <u>corajoso</u> soldado avançou.</em></li>
+        <li><strong>Adjunto adverbial:</strong> modifica verbo: <em>Avançou <u>rapidamente</u>.</em></li>
+        <li><strong>Aposto:</strong> explica ou resume: <em>João, <u>o recruta</u>, treinou muito.</em></li>
+      </ul>
+      <div class="tip-box"><strong>💡 Dica:</strong> Para identificar o sujeito, pergunte "Quem + verbo?". Para objeto direto, "verbo + quê/quem?" sem preposição.</div>
+    `
+  },
+  concordancia: {
+    title: 'Concordância',
+    subtitle: 'Verbal e Nominal | Português',
+    content: `
+      <h3>Concordância Verbal</h3>
+      <p>O verbo concorda em número e pessoa com o sujeito.</p>
+      <div class="formula-box">
+        "Os recrutas treinaram" (sujeito plural → verbo plural) ✓<br>
+        "Os recrutas treinou" ✗
+      </div>
+      <h3>Casos Especiais — Verbal</h3>
+      <ul>
+        <li><strong>Sujeito coletivo:</strong> verbo no singular: <em>"A tropa avançou."</em></li>
+        <li><strong>Sujeito composto antes do verbo:</strong> verbo plural: <em>"Pedro e Paulo chegaram."</em></li>
+        <li><strong>Pronome relativo "que":</strong> verbo concorda com o antecedente: <em>"Fui eu que falei."</em></li>
+      </ul>
+      <h3>Concordância Nominal</h3>
+      <p>Artigos, adjetivos, pronomes e numerais concordam em gênero e número com o substantivo.</p>
+      <div class="formula-box">
+        "Os soldados valentes" ✓ &nbsp;&nbsp; "As missões difíceis" ✓<br>
+        "Os soldado valente" ✗
+      </div>
+      <div class="tip-box"><strong>💡 Dica:</strong> Adjetivo posposto a substantivos de gêneros diferentes → fica no masculino plural: <em>"Trouxe cadernos e canetas novos."</em></div>
+    `
+  },
+  regencia: {
+    title: 'Regência Verbal e Nominal',
+    subtitle: 'Uso de Preposições | Português',
+    content: `
+      <h3>Regência Verbal</h3>
+      <p>Define se o verbo é transitivo direto (sem preposição), indireto (com preposição) ou intransitivo.</p>
+      <div class="formula-box">
+        Assistir (a algo) → Assisti <u>ao</u> treinamento. (não: "assisti o treinamento")<br>
+        Visar (a algo) → A missão visa <u>ao</u> objetivo.<br>
+        Preferir (a) → Prefiro natação <u>a</u> corrida.
+      </div>
+      <h3>Verbos com Dupla Regência</h3>
+      <ul>
+        <li><strong>Querer:</strong> TD (querer algo) ou TI (querer a alguém — amar): <em>Quero paz / Quero bem a você.</em></li>
+        <li><strong>Pagar/perdoar:</strong> TD (coisa) ou TI (pessoa): <em>Pagou a conta / Pagou ao credor.</em></li>
+      </ul>
+      <h3>Regência Nominal</h3>
+      <p>Nomes (substantivos, adjetivos) também exigem preposições específicas.</p>
+      <div class="formula-box">
+        Saudoso DE | Ansioso POR | Curioso SOBRE<br>
+        Capaz DE | Compatível COM | Alheio A
+      </div>
+      <div class="tip-box"><strong>💡 Dica:</strong> Memorize os verbos mais cobrados: assistir (a), obedecer (a), aspirar (a = desejar), visar (a = ter como objetivo).</div>
+    `
+  },
+  interpretacao: {
+    title: 'Interpretação de Texto',
+    subtitle: 'Compreensão e Análise | Português',
+    content: `
+      <h3>Estratégia de Leitura</h3>
+      <p>1. Leia as questões ANTES do texto para saber o que procurar.</p>
+      <p>2. Na primeira leitura, identifique: tema central, argumentos principais, conclusão do autor.</p>
+      <p>3. Na segunda leitura, busque as informações pedidas nas questões.</p>
+      <h3>Tipos de Questões</h3>
+      <ul>
+        <li><strong>Ideia principal:</strong> O que o texto defende/expõe como tema central?</li>
+        <li><strong>Vocabulário:</strong> Substituição de palavra por sinônimo contextual.</li>
+        <li><strong>Inferência:</strong> O que se pode concluir implicitamente do texto?</li>
+        <li><strong>Referência:</strong> A que o pronome/expressão se refere no texto?</li>
+      </ul>
+      <h3>Tipos de Texto</h3>
+      <ul>
+        <li><strong>Narrativo:</strong> Conta uma história (narrador, personagens, espaço, tempo).</li>
+        <li><strong>Descritivo:</strong> Descreve características de pessoas ou lugares.</li>
+        <li><strong>Dissertativo-argumentativo:</strong> Defende uma tese com argumentos.</li>
+        <li><strong>Expositivo:</strong> Explica ou informa sem defesa de posição.</li>
+      </ul>
+      <div class="tip-box"><strong>💡 Dica:</strong> Nunca responda com o que você acha ou sabe. Responda SOMENTE com base no que está no texto. Questões de concurso pedem a visão do autor, não a sua.</div>
+    `
+  },
+  coesao: {
+    title: 'Coesão e Coerência',
+    subtitle: 'Textualidade | Português',
+    content: `
+      <h3>Coesão Textual</h3>
+      <p>São os mecanismos que ligam as partes do texto. Divide-se em:</p>
+      <ul>
+        <li><strong>Referencial:</strong> Uso de pronomes, sinônimos para retomar elementos: <em>"O soldado chegou. Ele estava cansado."</em></li>
+        <li><strong>Sequencial:</strong> Conectivos que organizam a sequência: <em>portanto, entretanto, assim, além disso.</em></li>
+      </ul>
+      <h3>Principais Conectivos</h3>
+      <div class="formula-box">
+        Adição: e, também, além disso, ainda<br>
+        Oposição: mas, porém, entretanto, contudo, no entanto<br>
+        Causa: porque, pois, uma vez que, visto que<br>
+        Conclusão: portanto, logo, assim, por isso<br>
+        Condição: se, caso, desde que, contanto que
+      </div>
+      <h3>Coerência Textual</h3>
+      <p>O texto é coerente quando suas ideias fazem sentido, sem contradições lógicas. Depende do conhecimento de mundo e da lógica das afirmações.</p>
+      <div class="tip-box"><strong>💡 Dica:</strong> Em questões sobre conectivos, teste a substituição pelo sinônimo. Se o sentido se mantiver, a troca está correta.</div>
+    `
+  },
+  redacao: {
+    title: 'Redação Oficial',
+    subtitle: 'Comunicação Formal | Português',
+    content: `
+      <h3>Características da Redação Oficial</h3>
+      <ul>
+        <li><strong>Clareza:</strong> Linguagem direta, sem ambiguidades.</li>
+        <li><strong>Concisão:</strong> Sem palavras desnecessárias.</li>
+        <li><strong>Impessoalidade:</strong> Tratar em 3ª pessoa ou usar a voz passiva.</li>
+        <li><strong>Formalidade:</strong> Vocabulário culto, sem gírias ou coloquialismos.</li>
+      </ul>
+      <h3>Principais Documentos Oficiais</h3>
+      <p><strong>Ofício:</strong> Comunicação entre órgãos públicos ou para particulares.</p>
+      <p><strong>Memorando:</strong> Comunicação interna entre setores de uma organização.</p>
+      <p><strong>Requerimento:</strong> Pedido formal dirigido a uma autoridade.</p>
+      <p><strong>Ata:</strong> Registro de reunião ou assembleia.</p>
+      <h3>Pronomes de Tratamento Militares</h3>
+      <div class="formula-box">
+        Vossa Excelência (V. Ex.ª): Almirante, General, Ministro<br>
+        Vossa Senhoria (V. S.ª): Oficial (Coronel abaixo)<br>
+        3ª pessoa do singular para cargos
+      </div>
+      <div class="tip-box"><strong>💡 Dica:</strong> "Vossa Excelência" → use verbo na 3ª pessoa: "Vossa Excelência assinou o documento." — NUNCA "você assinou".</div>
+    `
+  }
+};
+
+const ALL_QUESTIONS = [
+  // MATEMÁTICA - FÁCIL
+  { id:1, subj:'mat', diff:'facil', text:'Qual é o resultado de 3² + 4²?', opts:['A) 25','B) 23','C) 20','D) 49'], answer:0, explain:'3² = 9 e 4² = 16. Somando: 9 + 16 = 25. Também é o quadrado da hipotenusa de um triângulo 3-4-5.' },
+  { id:2, subj:'mat', diff:'facil', text:'Uma pessoa comprou um produto por R$80 com desconto de 25%. Qual era o preço original?', opts:['A) R$100,00','B) R$105,00','C) R$106,67','D) R$120,00'], answer:2, explain:'Preço final = Original × 0,75. Logo: 80 ÷ 0,75 = R$106,67.' },
+  { id:3, subj:'mat', diff:'facil', text:'Qual é o MMC de 6 e 8?', opts:['A) 48','B) 24','C) 12','D) 2'], answer:1, explain:'MMC(6,8): 6=2×3; 8=2³. MMC = 2³×3 = 24.' },
+  { id:4, subj:'mat', diff:'facil', text:'Se 20% de um número é 14, qual é esse número?', opts:['A) 60','B) 70','C) 80','D) 90'], answer:1, explain:'20% de x = 14 → 0,20x = 14 → x = 14 ÷ 0,20 = 70.' },
+  { id:5, subj:'mat', diff:'facil', text:'Um retângulo tem base 8cm e altura 5cm. Qual é sua área?', opts:['A) 26 cm²','B) 40 cm²','C) 20 cm²','D) 13 cm²'], answer:1, explain:'Área do retângulo = base × altura = 8 × 5 = 40 cm².' },
+  { id:6, subj:'mat', diff:'facil', text:'Qual é o valor de x na equação 2x + 6 = 14?', opts:['A) x = 2','B) x = 3','C) x = 4','D) x = 5'], answer:2, explain:'2x = 14 - 6 = 8 → x = 8/2 = 4.' },
+  { id:7, subj:'mat', diff:'facil', text:'Em um grupo de 40 pessoas, 30% são militares. Quantos são militares?', opts:['A) 10','B) 12','C) 14','D) 12'], answer:1, explain:'30% de 40 = 0,30 × 40 = 12 militares.' },
+  // MATEMÁTICA - MÉDIO
+  { id:8, subj:'mat', diff:'medio', text:'Uma torneira enche um tanque em 6 horas. Quanto tempo levarão 3 torneiras iguais para encher o mesmo tanque?', opts:['A) 18 horas','B) 3 horas','C) 2 horas','D) 9 horas'], answer:2, explain:'Grandeza inversamente proporcional. 1 torneira → 6h. 3 torneiras → 6÷3 = 2 horas.' },
+  { id:9, subj:'mat', diff:'medio', text:'Um capital de R$2.000 foi aplicado a juros simples de 3% ao mês durante 4 meses. Qual o montante final?', opts:['A) R$2.120','B) R$2.240','C) R$2.060','D) R$2.400'], answer:1, explain:'J = C × i × t = 2000 × 0,03 × 4 = R$240. Montante = 2000 + 240 = R$2.240.' },
+  { id:10, subj:'mat', diff:'medio', text:'Resolva: x² − 7x + 12 = 0. Qual é a maior raiz?', opts:['A) 2','B) 3','C) 4','D) 6'], answer:2, explain:'Δ = 49 - 48 = 1. x = (7±1)/2. x₁=4, x₂=3. Maior raiz = 4.' },
+  { id:11, subj:'mat', diff:'medio', text:'A média de notas de um aluno em 4 provas foi 7,5. Se as três primeiras foram 8, 7 e 6, qual foi a quarta nota?', opts:['A) 8','B) 9','C) 9,5','D) 10'], answer:1, explain:'Soma total = 7,5×4 = 30. Soma das três primeiras = 8+7+6 = 21. Quarta nota = 30−21 = 9.' },
+  { id:12, subj:'mat', diff:'medio', text:'Divida R$480 entre A, B e C na proporção 2:3:5. Qual é a parte de C?', opts:['A) R$96','B) R$144','C) R$240','D) R$200'], answer:2, explain:'Total partes = 2+3+5=10. Valor de cada parte = 480/10 = 48. C = 5×48 = R$240.' },
+  { id:13, subj:'mat', diff:'medio', text:'Um triângulo tem catetos 6cm e 8cm. Qual é a hipotenusa?', opts:['A) 12cm','B) 14cm','C) 10cm','D) 7cm'], answer:2, explain:'h² = 6² + 8² = 36+64 = 100. h = √100 = 10cm. (Triângulo 3-4-5 multiplicado por 2).' },
+  // MATEMÁTICA - DIFÍCIL
+  { id:14, subj:'mat', diff:'dificil', text:'Uma loja aumentou o preço de um produto em 20% e depois concedeu um desconto de 20%. Qual foi a variação percentual final?', opts:['A) 0% (preço original)','B) −4% (ficou mais barato)','C) +4% (ficou mais caro)','D) −2%'], answer:1, explain:'Aumento de 20%: ×1,2. Desconto de 20%: ×0,8. Total: 1,2×0,8 = 0,96 → variação de −4%. Aumentos e descontos sucessivos não se cancelam!' },
+  { id:15, subj:'mat', diff:'dificil', text:'Em uma PA (progressão aritmética), os três primeiros termos são 3, 7, 11. Qual é o 10º termo?', opts:['A) 35','B) 39','C) 43','D) 47'], answer:1, explain:'Razão r = 7−3 = 4. aₙ = a₁ + (n−1)r. a₁₀ = 3 + 9×4 = 3+36 = 39.' },
+  // PORTUGUÊS - FÁCIL
+  { id:16, subj:'port', diff:'facil', text:'Assinale a alternativa em que todas as palavras estão corretamente escritas:', opts:['A) excessão, posição, satisfação','B) exceção, posição, satisfação','C) exceção, pozição, satisfação','D) excessão, posição, satisfação'], answer:1, explain:'"Exceção" (não "excessão") deriva de "exceto". "Posição" e "satisfação" com S/Ç são as formas corretas.' },
+  { id:17, subj:'port', diff:'facil', text:'Qual a classe gramatical da palavra destacada: "O soldado avançou RAPIDAMENTE."?', opts:['A) Adjetivo','B) Advérbio','C) Conjunção','D) Pronome'], answer:1, explain:'"Rapidamente" modifica o verbo "avançou", indicando modo. Logo, é um ADVÉRBIO de modo.' },
+  { id:18, subj:'port', diff:'facil', text:'Na frase "Os militares e as recrutas chegaram cedo", o verbo "chegaram" está corretamente concordando com:', opts:['A) "militares" apenas','B) "recrutas" apenas','C) O sujeito composto (militares + recrutas)','D) O predicativo'], answer:2, explain:'Sujeito composto (antes do verbo) → verbo no plural. "Os militares e as recrutas" são o sujeito composto, logo o verbo vai para o plural.' },
+  { id:19, subj:'port', diff:'facil', text:'A palavra "corajoso" na frase "O fuzileiro corajoso cumpriu a missão" é:', opts:['A) Objeto direto','B) Predicativo do sujeito','C) Adjunto adnominal','D) Adjunto adverbial'], answer:2, explain:'"Corajoso" qualifica o substantivo "fuzileiro", sendo um ADJUNTO ADNOMINAL — modifica o núcleo do sujeito.' },
+  { id:20, subj:'port', diff:'facil', text:'Qual das alternativas apresenta o correto uso de "por que", "porque", "por quê" e "porquê"?', opts:['A) Por que estudas? / Estudo porque gosto / Estudo. Por quê? / O porquê do estudo.','B) Porque estudas? / Estudo por que gosto / Por quê? / O por que do estudo.','C) Por quê estudas? / Estudo porquê gosto / Estudo, por que / O porque do estudo.','D) Porque estudas? / Estudo porquê / Por que? / O porquê do estudo.'], answer:0, explain:'POR QUE (pergunta/relativo), PORQUE (causa/explicação), POR QUÊ (final de frase ou resposta a pergunta), PORQUÊ (substantivo = o motivo).' },
+  // PORTUGUÊS - MÉDIO
+  { id:21, subj:'port', diff:'medio', text:'Assinale a alternativa em que há erro de regência verbal:', opts:['A) Assisti ao treinamento.','B) Aspirei à vaga de oficial.','C) Obedeci ao regulamento.','D) Prefiro a natação do que a corrida.'], answer:3, explain:'O verbo "preferir" rege a preposição "a", não "do que". Correto: "Prefiro natação A corrida." A construção com "do que" é coloquial e incorreta na norma culta.' },
+  { id:22, subj:'port', diff:'medio', text:'"Chegaram à base os recrutas exaustos." O sujeito dessa oração é:', opts:['A) "à base"','B) "recrutas exaustos"','C) "os recrutas exaustos"','D) Sujeito indeterminado'], answer:2, explain:'Sujeito = de quem se fala. "Chegaram" quem? "Os recrutas exaustos". "À base" é adjunto adverbial de lugar.' },
+  { id:23, subj:'port', diff:'medio', text:'Leia o trecho: "Embora chovesse muito, os soldados completaram o percurso." A oração subordinada expressa:', opts:['A) Causa','B) Concessão','C) Condição','D) Finalidade'], answer:1, explain:'"Embora" é conjunção concessiva. A oração admite um fato contrário (chuva) sem impedir o resultado principal (completaram).' },
+  { id:24, subj:'port', diff:'medio', text:'O conectivo "contudo" estabelece que tipo de relação entre orações?', opts:['A) Adição','B) Explicação','C) Oposição/Adversidade','D) Conclusão'], answer:2, explain:'"Contudo" é conjunção adversativa, equivalente a "mas", "porém", "entretanto". Estabelece oposição entre as ideias.' },
+  // PORTUGUÊS - DIFÍCIL
+  { id:25, subj:'port', diff:'dificil', text:'Na frase "Precisa-se de soldados disciplinados", o verbo "precisa-se" indica:', opts:['A) Voz passiva reflexiva','B) Sujeito indeterminado','C) Voz passiva analítica','D) Oração sem sujeito'], answer:1, explain:'Quando "se" é índice de indeterminação do sujeito, o verbo fica no singular mesmo com complemento no plural. O sujeito está indeterminado — não sabemos quem precisa.' },
+  { id:26, subj:'port', diff:'dificil', text:'Assinale a alternativa em que a vírgula está corretamente empregada:', opts:['A) O comandante, ordenou a retirada imediata.','B) Joana, a primeira recruta a chegar, recebeu elogio.','C) Marchou depressa, e cansou.','D) Compramos, fardamento e equipamento.'], answer:1, explain:'A vírgula isola o aposto explicativo "a primeira recruta a chegar". As demais alternativas usam vírgula de forma incorreta (separando sujeito do verbo ou termos essenciais).' },
+];
+
+// ===================== STATE =====================
+let state = {
+  xp: 0,
+  questionsAnswered: 0,
+  correctAnswers: 0,
+  simuladosDone: 0,
+  topicsDone: [],
+  currentSubject: 'mat',
+  currentTopicIdx: 0,
+  currentQFilter: 'all',
+  currentQIdx: 0,
+  filteredQs: [],
+  answered: false,
+  simActive: false,
+  simQs: [],
+  simIdx: 0,
+  simAnswers: [],
+  simTimer: null,
+  simSeconds: 3600,
+  history: []
+};
+
+// ===================== NAVIGATION =====================
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(id==='exercicios') loadQuestion();
+}
+
+// ===================== XP =====================
+function addXP(amount) {
+  state.xp += amount;
+  const max = 500;
+  const pct = Math.min((state.xp / max) * 100, 100);
+  document.getElementById('xpFill').style.width = pct + '%';
+  document.getElementById('xpLabel').textContent = `XP: ${state.xp} / ${max}`;
+  updateRank();
+  updateStats();
+}
+
+function updateRank() {
+  const xp = state.xp;
+  let rank = 'Recruta';
+  if(xp >= 400) rank = 'Cabo';
+  else if(xp >= 250) rank = '3º Sargento';
+  else if(xp >= 150) rank = '2º Sargento';
+  else if(xp >= 80) rank = 'Soldado';
+  document.getElementById('rankLabel').textContent = rank;
+}
+
+function updateStats() {
+  document.getElementById('stat-questoes').textContent = state.questionsAnswered;
+  const pct = state.questionsAnswered > 0 ? Math.round((state.correctAnswers/state.questionsAnswered)*100) : 0;
+  document.getElementById('stat-acertos').textContent = pct + '%';
+  document.getElementById('stat-simulados').textContent = state.simuladosDone;
+  document.getElementById('stat-topicos').textContent = state.topicsDone.length;
+}
+
+// ===================== TEORIA =====================
+function switchSubject(subj, btn) {
+  state.currentSubject = subj;
+  state.currentTopicIdx = 0;
+  document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTopicList();
+  const firstTopic = TOPICS[subj][0];
+  loadTopic(subj, firstTopic.id);
+}
+
+function renderTopicList() {
+  const list = document.getElementById('topicList');
+  const subj = state.currentSubject;
+  document.getElementById('sidebarTitle').textContent = subj === 'mat' ? 'Matemática' : 'Português';
+  list.innerHTML = TOPICS[subj].map((t, i) => {
+    const done = state.topicsDone.includes(subj+'-'+t.id);
+    const active = i === state.currentTopicIdx;
+    return `<li class="topic-item ${done?'done':''} ${active?'active':''}" onclick="selectTopic(${i})">
+      <span class="dot"></span>${t.label}
+    </li>`;
+  }).join('');
+}
+
+function selectTopic(idx) {
+  state.currentTopicIdx = idx;
+  const subj = state.currentSubject;
+  const topic = TOPICS[subj][idx];
+  renderTopicList();
+  loadTopic(subj, topic.id);
+}
+
+function loadTopic(subj, id) {
+  const data = THEORY[id];
+  if(!data) {
+    document.getElementById('theoryTitle').textContent = 'Em breve';
+    document.getElementById('theorySubtitle').textContent = 'Conteúdo sendo elaborado';
+    document.getElementById('theoryContent').innerHTML = '<p>Este tópico estará disponível em breve. Continue estudando os outros!</p>';
+    return;
+  }
+  document.getElementById('theoryTitle').textContent = data.title;
+  document.getElementById('theorySubtitle').textContent = data.subtitle;
+  document.getElementById('theoryContent').innerHTML = data.content;
+}
+
+function setTopic(subj, topicId) {
+  state.currentSubject = subj;
+  const idx = TOPICS[subj].findIndex(t => t.id === topicId);
+  state.currentTopicIdx = idx >= 0 ? idx : 0;
+  const tabs = document.querySelectorAll('#teoria .filter-tab');
+  tabs.forEach(t => t.classList.remove('active'));
+  tabs[subj==='mat'?0:1].classList.add('active');
+  renderTopicList();
+  loadTopic(subj, TOPICS[subj][state.currentTopicIdx].id);
+}
+
+function markTopicDone() {
+  const subj = state.currentSubject;
+  const topic = TOPICS[subj][state.currentTopicIdx];
+  const key = subj+'-'+topic.id;
+  if(!state.topicsDone.includes(key)) {
+    state.topicsDone.push(key);
+    addXP(15);
+  }
+  renderTopicList();
+  updateProgressPage();
+  nextTopic();
+}
+
+function prevTopic() {
+  if(state.currentTopicIdx > 0) selectTopic(state.currentTopicIdx - 1);
+}
+
+function nextTopic() {
+  const topics = TOPICS[state.currentSubject];
+  if(state.currentTopicIdx < topics.length - 1) selectTopic(state.currentTopicIdx + 1);
+}
+
+// ===================== EXERCÍCIOS =====================
+function filterQ(f, btn) {
+  state.currentQFilter = f;
+  document.querySelectorAll('#exercicios .filter-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  state.currentQIdx = 0;
+  state.answered = false;
+  loadQuestion();
+}
+
+function getFilteredQs() {
+  return ALL_QUESTIONS.filter(q => {
+    if(state.currentQFilter === 'all') return true;
+    return q.subj === state.currentQFilter || q.diff === state.currentQFilter;
+  });
+}
+
+function loadQuestion() {
+  const qs = getFilteredQs();
+  if(qs.length === 0) return;
+  if(state.currentQIdx >= qs.length) state.currentQIdx = 0;
+  const q = qs[state.currentQIdx];
+  state.answered = false;
+  document.getElementById('qCounter').textContent = `${state.currentQIdx+1} / ${qs.length}`;
+  document.getElementById('scoreLive').textContent = state.correctAnswers;
+  document.getElementById('errorsLive').textContent = state.questionsAnswered - state.correctAnswers;
+  const meta = document.getElementById('questionMeta');
+  meta.innerHTML = `<span class="badge badge-${q.subj}">${q.subj==='mat'?'Matemática':'Português'}</span>
+    <span class="badge badge-${q.diff}">${q.diff==='facil'?'Fácil':q.diff==='medio'?'Médio':'Difícil'}</span>`;
+  document.getElementById('questionText').textContent = q.text;
+  const list = document.getElementById('optionsList');
+  const letters = ['A','B','C','D'];
+  list.innerHTML = q.opts.map((o, i) => `
+    <li>
+      <button class="option-btn" onclick="answerQ(${i},${q.answer},'${q.explain.replace(/'/g,"\\'")}',${q.id})">
+        <span class="opt-letter">${letters[i]}</span>
+        <span>${o.substring(3)}</span>
+      </button>
+    </li>`).join('');
+  document.getElementById('feedbackBox').classList.remove('show','wrong-fb');
+  document.getElementById('nextQBtn').style.display = 'none';
+}
+
+function answerQ(chosen, correct, explain, qid) {
+  if(state.answered) return;
+  state.answered = true;
+  state.questionsAnswered++;
+  const isCorrect = chosen === correct;
+  if(isCorrect) { state.correctAnswers++; addXP(10); }
+  else { addXP(2); }
+  const btns = document.querySelectorAll('.option-btn');
+  btns.forEach((b, i) => {
+    b.disabled = true;
+    if(i === correct) b.classList.add('correct');
+    else if(i === chosen && !isCorrect) b.classList.add('wrong');
+  });
+  const fb = document.getElementById('feedbackBox');
+  document.getElementById('feedbackTitle').textContent = isCorrect ? '✅ Resposta Correta!' : '❌ Resposta Incorreta';
+  document.getElementById('feedbackText').textContent = explain;
+  fb.classList.add('show');
+  if(!isCorrect) fb.classList.add('wrong-fb');
+  document.getElementById('nextQBtn').style.display = 'inline-block';
+  updateStats();
+}
+
+function nextQuestion() {
+  const qs = getFilteredQs();
+  state.currentQIdx = (state.currentQIdx + 1) % qs.length;
+  loadQuestion();
+}
+
+function shuffleQuestions() {
+  ALL_QUESTIONS.sort(() => Math.random() - 0.5);
+  state.currentQIdx = 0;
+  loadQuestion();
+}
+
+// ===================== SIMULADO =====================
+function startSimulado() {
+  const shuffled = [...ALL_QUESTIONS].sort(() => Math.random() - 0.5).slice(0, 20);
+  state.simQs = shuffled;
+  state.simIdx = 0;
+  state.simAnswers = new Array(20).fill(null);
+  state.simSeconds = 3600;
+  document.getElementById('simStart').style.display = 'none';
+  document.getElementById('simProgress').style.display = 'block';
+  document.getElementById('simResult').style.display = 'none';
+  document.getElementById('simQTotal').textContent = shuffled.length;
+  renderSimQuestion();
+  startTimer();
+}
+
+function renderSimQuestion() {
+  const q = state.simQs[state.simIdx];
+  document.getElementById('simQNum').textContent = state.simIdx + 1;
+  document.getElementById('simProgress2').style.width = ((state.simIdx+1)/state.simQs.length*100)+'%';
+  const meta = document.getElementById('simQMeta');
+  meta.innerHTML = `<span class="badge badge-${q.subj}">${q.subj==='mat'?'Matemática':'Português'}</span>
+    <span class="badge badge-${q.diff}">${q.diff==='facil'?'Fácil':q.diff==='medio'?'Médio':'Difícil'}</span>`;
+  document.getElementById('simQText').textContent = q.text;
+  const letters = ['A','B','C','D'];
+  const opts = document.getElementById('simOptions');
+  opts.innerHTML = q.opts.map((o, i) => `
+    <li>
+      <button class="option-btn" onclick="simAnswer(${i})">
+        <span class="opt-letter">${letters[i]}</span>
+        <span>${o.substring(3)}</span>
+      </button>
+    </li>`).join('');
+  document.getElementById('simNextBtn').style.display = 'none';
+}
+
+function simAnswer(chosen) {
+  const q = state.simQs[state.simIdx];
+  state.simAnswers[state.simIdx] = chosen;
+  const btns = document.querySelectorAll('#simOptions .option-btn');
+  btns.forEach((b, i) => {
+    b.disabled = true;
+    if(i === q.answer) b.classList.add('correct');
+    else if(i === chosen && chosen !== q.answer) b.classList.add('wrong');
+  });
+  document.getElementById('simNextBtn').style.display = 'inline-block';
+  if(state.simIdx === state.simQs.length - 1) {
+    document.getElementById('simNextBtn').textContent = 'Ver Resultado ✓';
+    document.getElementById('simNextBtn').onclick = finishSimulado;
+  }
+}
+
+function simNext() {
+  state.simIdx++;
+  if(state.simIdx >= state.simQs.length) { finishSimulado(); return; }
+  renderSimQuestion();
+}
+
+function startTimer() {
+  if(state.simTimer) clearInterval(state.simTimer);
+  state.simTimer = setInterval(() => {
+    state.simSeconds--;
+    if(state.simSeconds <= 0) { clearInterval(state.simTimer); finishSimulado(); return; }
+    const m = Math.floor(state.simSeconds/60);
+    const s = state.simSeconds % 60;
+    document.getElementById('simTimer').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    if(state.simSeconds <= 300) document.getElementById('simTimer').style.color = '#f87171';
+  }, 1000);
+}
+
+function finishSimulado() {
+  if(state.simTimer) clearInterval(state.simTimer);
+  const correct = state.simQs.reduce((acc, q, i) => acc + (state.simAnswers[i] === q.answer ? 1 : 0), 0);
+  const total = state.simQs.length;
+  const pct = Math.round((correct/total)*100);
+  const passed = pct >= 70;
+  state.simuladosDone++;
+  addXP(passed ? 80 : 30);
+  // History
+  const now = new Date();
+  state.history.push({ date: now.toLocaleDateString('pt-BR'), total, correct, pct, passed });
+  updateHistory();
+  updateProgressPage();
+  document.getElementById('simProgress').style.display = 'none';
+  document.getElementById('simResult').style.display = 'block';
+  document.getElementById('resultBadge').textContent = passed ? '🏅' : '📋';
+  document.getElementById('resultTitle').textContent = passed ? 'APROVADO!' : 'CONTINUE TREINANDO';
+  document.getElementById('resultTitle').style.color = passed ? 'var(--gold)' : '#f87171';
+  document.getElementById('resultPct').textContent = pct + '%';
+  document.getElementById('resultPct').style.color = passed ? (pct>=90?'#86efac':'var(--gold)') : '#f87171';
+  document.getElementById('resultGrid').innerHTML = `
+    <div class="sim-info"><div class="num" style="color:${passed?'#86efac':'#f87171'}">${correct}</div><div class="lbl">Acertos</div></div>
+    <div class="sim-info"><div class="num">${total-correct}</div><div class="lbl">Erros</div></div>
+    <div class="sim-info"><div class="num">${pct}%</div><div class="lbl">Nota</div></div>
+  `;
+}
+
+function resetSimulado() {
+  document.getElementById('simStart').style.display = 'block';
+  document.getElementById('simProgress').style.display = 'none';
+  document.getElementById('simResult').style.display = 'none';
+}
+
+// ===================== PROGRESSO =====================
+function updateProgressPage() {
+  const matTopics = TOPICS.mat.length;
+  const portTopics = TOPICS.port.length;
+  const matDone = state.topicsDone.filter(t => t.startsWith('mat')).length;
+  const portDone = state.topicsDone.filter(t => t.startsWith('port')).length;
+  const matPct = Math.round((matDone/matTopics)*100);
+  const portPct = Math.round((portDone/portTopics)*100);
+  const qPct = state.questionsAnswered > 0 ? Math.round((state.correctAnswers/state.questionsAnswered)*100) : 0;
+  const simPct = state.history.length > 0 ? Math.round(state.history.reduce((a,h)=>a+h.pct,0)/state.history.length) : 0;
+  const setProg = (id, pct) => {
+    document.getElementById('pb'+id).style.width = pct+'%';
+    document.getElementById('pp'+id).textContent = pct+'%';
+  };
+  setProg(1, matPct);
+  setProg(2, Math.round((matDone/(matTopics*0.4))*100));
+  setProg(3, Math.round((matDone/(matTopics*0.3))*100));
+  setProg(4, portPct);
+  setProg(5, Math.round((portDone/(portTopics*0.3))*100));
+  setProg(6, simPct);
+  // Module cards
+  document.getElementById('pMat').style.width = matPct+'%';
+  document.getElementById('pMatTxt').textContent = matPct+'%';
+  document.getElementById('pPort').style.width = portPct+'%';
+  document.getElementById('pPortTxt').textContent = portPct+'%';
+}
+
+function updateHistory() {
+  const tbody = document.getElementById('historyBody');
+  if(state.history.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--gray);padding:32px">Nenhum simulado realizado ainda.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = [...state.history].reverse().map(h => `
+    <tr>
+      <td>${h.date}</td>
+      <td>${h.total}</td>
+      <td>${h.correct}</td>
+      <td style="color:${h.pct>=70?'#86efac':'#f87171'}">${h.pct}%</td>
+      <td><span class="badge ${h.passed?'badge-easy':'badge-hard'}">${h.passed?'APROVADO':'REPROVADO'}</span></td>
+    </tr>`).join('');
+}
+
+// ===================== LOGIN =====================
+const SENHA = 'fuzileiro2025';
+
+function checkLogin() {
+  const val = document.getElementById('pwInput').value;
+  const err = document.getElementById('loginError');
+  if(val === SENHA) {
+    const screen = document.getElementById('loginScreen');
+    screen.style.transition = 'opacity 0.4s ease';
+    screen.style.opacity = '0';
+    setTimeout(() => {
+      screen.style.display = 'none';
+      document.getElementById('appContent').style.display = 'block';
+      init();
+    }, 400);
+  } else {
+    err.style.display = 'block';
+    document.getElementById('pwInput').value = '';
+    document.getElementById('pwInput').focus();
+    setTimeout(() => err.style.display = 'none', 3000);
+  }
+}
+
+function togglePw() {
+  const input = document.getElementById('pwInput');
+  input.type = input.type === 'password' ? 'text' : 'password';
+}
+
+// ===================== INIT =====================
+function init() {
+  renderTopicList();
+  loadTopic('mat', 'basica');
+  loadQuestion();
+  updateStats();
+  updateProgressPage();
+}
+
+// Auto-focus on password field
+document.getElementById('pwInput').focus();
+</script>
+</div><!-- /appContent -->
+</body>
+</html>
