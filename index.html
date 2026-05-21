@@ -1853,6 +1853,36 @@ function showSection(id, btn) {
   if(id==='exercicios') loadQuestion();
 }
 
+// ===================== PERSISTÊNCIA DE DADOS =====================
+function saveProgress() {
+  try {
+    localStorage.setItem('fuzileiro_state', JSON.stringify(state));
+    console.log('✅ Progresso salvo com sucesso!');
+  } catch(e) {
+    console.error('❌ Erro ao salvar progresso:', e);
+  }
+}
+
+function loadProgress() {
+  try {
+    const saved = localStorage.getItem('fuzileiro_state');
+    if(saved) {
+      const loaded = JSON.parse(saved);
+      Object.assign(state, loaded);
+      console.log('✅ Progresso carregado com sucesso!');
+      return true;
+    }
+  } catch(e) {
+    console.error('❌ Erro ao carregar progresso:', e);
+  }
+  return false;
+}
+
+function clearProgress() {
+  localStorage.removeItem('fuzileiro_state');
+  console.log('🗑️ Progresso limpo!');
+}
+
 // ===================== XP =====================
 function addXP(amount) {
   state.xp += amount;
@@ -1862,6 +1892,7 @@ function addXP(amount) {
   document.getElementById('xpLabel').textContent = `XP: ${state.xp} / ${max}`;
   updateRank();
   updateStats();
+  saveProgress();
 }
 
 function updateRank() {
@@ -1948,6 +1979,7 @@ function markTopicDone() {
   }
   renderTopicList();
   updateProgressPage();
+  saveProgress();
   nextTopic();
 }
 
@@ -2023,6 +2055,7 @@ function answerQ(chosen, correct, explain, qid) {
   if(!isCorrect) fb.classList.add('wrong-fb');
   document.getElementById('nextQBtn').style.display = 'inline-block';
   updateStats();
+  saveProgress();
 }
 
 function nextQuestion() {
@@ -2086,6 +2119,7 @@ function simAnswer(chosen) {
     document.getElementById('simNextBtn').textContent = 'Ver Resultado ✓';
     document.getElementById('simNextBtn').onclick = finishSimulado;
   }
+  saveProgress();
 }
 
 function simNext() {
@@ -2119,6 +2153,7 @@ function finishSimulado() {
   state.history.push({ date: now.toLocaleDateString('pt-BR'), total, correct, pct, passed });
   updateHistory();
   updateProgressPage();
+  saveProgress();
   document.getElementById('simProgress').style.display = 'none';
   document.getElementById('simResult').style.display = 'block';
   document.getElementById('resultBadge').textContent = passed ? '🏅' : '📋';
@@ -2212,6 +2247,7 @@ function togglePw() {
 
 // ===================== INIT =====================
 function init() {
+  loadProgress();
   renderTopicList();
   loadTopic('mat', 'basica');
   loadQuestion();
