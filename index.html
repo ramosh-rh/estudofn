@@ -1,231 +1,1699 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Missão Fuzileiro Naval - Renan</title>
-    <style>
-        :root { --fundo: #0b1320; --card: #152238; --ouro: #c5a059; --texto: #e2e8f0; --verde: #22c55e; --vermelho: #ef4444; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--fundo); color: var(--texto); margin: 0; padding: 0; }
-        
-        /* Cabeçalho e Navegação */
-        header { background: #050a11; padding: 20px; text-align: center; border-bottom: 3px solid var(--ouro); position: sticky; top: 0; z-index: 100; }
-        h1 { margin: 0; color: var(--ouro); font-size: 22px; text-transform: uppercase; letter-spacing: 2px; }
-        .painel-status { background: #0f172a; padding: 10px; text-align: center; border-bottom: 1px solid #1e293b; font-weight: bold; font-size: 14px; color: #94a3b8; }
-        .xp-text { color: var(--ouro); font-size: 18px; margin-left: 10px; }
-        
-        .menu { display: flex; background: var(--card); }
-        .aba-btn { flex: 1; padding: 15px; border: none; background: transparent; color: #64748b; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 14px; }
-        .aba-btn.ativa { color: var(--ouro); border-bottom: 3px solid var(--ouro); background: rgba(197, 160, 89, 0.1); }
-        
-        /* Container Principal */
-        .container { max-width: 800px; margin: 0 auto; padding: 20px; padding-bottom: 80px; }
-        .secao { display: none; animation: fadeIn 0.4s; }
-        .secao.ativa { display: block; }
-        .card { background: var(--card); border-radius: 8px; padding: 20px; margin-bottom: 20px; border-left: 4px solid var(--ouro); box-shadow: 0 4px 6px rgba(0,0,0,0.5); }
-        h2 { color: var(--ouro); margin-top: 0; border-bottom: 1px solid #1e293b; padding-bottom: 10px; font-size: 18px; }
-        
-        /* Estilos do Quiz */
-        .badge { background: #1e293b; color: var(--ouro); padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block; margin-bottom: 10px; }
-        .pergunta { font-size: 16px; font-weight: bold; margin-bottom: 15px; line-height: 1.5; }
-        .alt-btn { display: block; width: 100%; text-align: left; background: #1e293b; color: white; border: 1px solid #334155; padding: 12px; margin-bottom: 8px; border-radius: 5px; cursor: pointer; font-size: 15px; transition: 0.2s; }
-        .alt-btn:hover { background: #334155; }
-        .alt-btn:disabled { cursor: not-allowed; }
-        .feedback { display: none; padding: 15px; border-radius: 5px; margin-top: 10px; font-size: 14px; font-weight: bold; line-height: 1.4; }
-        
-        /* Botão Resetar */
-        .btn-reset { display: block; width: 100%; background: #334155; color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; }
-        
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fuzileiro Naval — Preparatório de Concurso</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-mid: #112240;
+    --navy-light: #1d3461;
+    --gold: #c9a227;
+    --gold-light: #e8c44a;
+    --green: #0d7c45;
+    --green-light: #13a55e;
+    --red: #b91c1c;
+    --white: #f0f4f8;
+    --gray: #8898aa;
+    --text: #cbd5e1;
+    --border: rgba(201,162,39,0.2);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--navy);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* LOGIN SCREEN */
+  #loginScreen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #050d1a 0%, #0a1628 50%, #071a30 100%);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  #loginScreen::before {
+    content:'';
+    position: absolute;
+    inset:0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(201,162,39,0.02) 60px, rgba(201,162,39,0.02) 61px),
+      repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(201,162,39,0.02) 60px, rgba(201,162,39,0.02) 61px);
+    pointer-events:none;
+  }
+
+  .login-box {
+    position: relative;
+    z-index:1;
+    background: rgba(17,34,64,0.95);
+    border: 1px solid rgba(201,162,39,0.3);
+    border-top: 3px solid var(--gold);
+    border-radius: 12px;
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+    animation: fadeIn 0.4s ease;
+  }
+
+  .login-emblem {
+    width: 72px; height: 72px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    color: var(--navy);
+  }
+
+  .login-box h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  .login-box p {
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-bottom: 32px;
+  }
+
+  .login-input-wrap {
+    position: relative;
+    margin-bottom: 16px;
+  }
+
+  .login-input {
+    width: 100%;
+    background: rgba(10,22,40,0.8);
+    border: 1px solid rgba(201,162,39,0.25);
+    border-radius: 6px;
+    padding: 14px 48px 14px 16px;
+    color: var(--white);
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    letter-spacing: 2px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .login-input:focus { border-color: var(--gold); }
+  .login-input::placeholder { color: var(--gray); letter-spacing: 1px; font-size: 13px; }
+
+  .toggle-pw {
+    position: absolute;
+    right: 14px; top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--gray);
+    transition: color 0.2s;
+  }
+
+  .toggle-pw:hover { color: var(--gold); }
+
+  .login-btn {
+    width: 100%;
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    border-radius: 6px;
+    padding: 14px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 3px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: all 0.15s;
+  }
+
+  .login-btn:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .login-btn:active { transform: translateY(0); }
+
+  .login-error {
+    background: rgba(185,28,28,0.15);
+    border: 1px solid rgba(185,28,28,0.4);
+    border-radius: 5px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #fca5a5;
+    margin-top: 12px;
+    display: none;
+    animation: shake 0.4s ease;
+  }
+
+  .login-hint {
+    margin-top: 20px;
+    font-size: 11px;
+    color: rgba(136,152,170,0.5);
+    letter-spacing: 1px;
+  }
+
+  @keyframes shake {
+    0%,100%{transform:translateX(0)}
+    20%{transform:translateX(-8px)}
+    40%{transform:translateX(8px)}
+    60%{transform:translateX(-5px)}
+    80%{transform:translateX(5px)}
+  }
+
+  #appContent { display: none; }
+
+  /* BACKGROUND TEXTURE */
+  body::before {
+    content:'';
+    position: fixed;
+    inset:0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 60px, rgba(201,162,39,0.02) 60px, rgba(201,162,39,0.02) 61px),
+      repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(201,162,39,0.02) 60px, rgba(201,162,39,0.02) 61px);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, #050d1a 0%, var(--navy-mid) 50%, #071a30 100%);
+    border-bottom: 2px solid var(--gold);
+    padding: 0;
+    position: sticky;
+    top:0;
+    z-index:100;
+    box-shadow: 0 4px 40px rgba(0,0,0,0.6);
+  }
+
+  .header-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 12px 24px;
+  }
+
+  .logo-emblem {
+    width: 52px; height: 52px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink:0;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--navy);
+    font-weight: 900;
+  }
+
+  .header-title {
+    flex:1;
+  }
+
+  .header-title h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    line-height:1;
+  }
+
+  .header-title p {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--gray);
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .progress-bar-wrap {
+    display: flex; flex-direction: column; align-items: flex-end; gap:4px;
+  }
+
+  .xp-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--gold);
+  }
+
+  .progress-bar {
+    width: 160px; height: 8px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid rgba(201,162,39,0.2);
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    border-radius: 4px;
+    transition: width 0.6s ease;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--navy-mid);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 78px;
+    z-index:99;
+  }
+
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .nav-inner::-webkit-scrollbar { display:none; }
+
+  .nav-btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--gray);
+    background: none;
+    border: none;
+    padding: 14px 22px;
+    cursor: pointer;
+    white-space: nowrap;
+    position: relative;
+    transition: color 0.2s;
+  }
+
+  .nav-btn::after {
+    content:'';
+    position: absolute;
+    bottom:0; left:0; right:0;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transition: transform 0.2s;
+  }
+
+  .nav-btn:hover { color: var(--white); }
+  .nav-btn.active { color: var(--gold); }
+  .nav-btn.active::after { transform: scaleX(1); }
+
+  /* MAIN */
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    position: relative;
+    z-index:1;
+  }
+
+  /* SECTIONS */
+  .section { display:none; }
+  .section.active { display:block; animation: fadeIn 0.3s ease; }
+
+  @keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
+
+  /* DASHBOARD */
+  .welcome-banner {
+    background: linear-gradient(135deg, var(--navy-light) 0%, #0d2a4a 100%);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--gold);
+    border-radius: 8px;
+    padding: 28px 32px;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .welcome-banner::before {
+    content: '⚓';
+    position: absolute;
+    right: 24px; top: 50%;
+    transform: translateY(-50%);
+    font-size: 80px;
+    opacity: 0.06;
+  }
+
+  .welcome-banner h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 2px;
+    color: var(--gold);
+  }
+
+  .welcome-banner p {
+    color: var(--text);
+    margin-top: 6px;
+    font-size: 15px;
+    max-width: 600px;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .stat-card {
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .stat-card:hover { transform: translateY(-2px); border-color: var(--gold); }
+
+  .stat-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    color: var(--gold);
+    line-height:1;
+  }
+
+  .stat-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+    margin-top: 4px;
+  }
+
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .module-card {
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .module-card::before {
+    content:'';
+    position: absolute;
+    top:0; left:0; right:0;
+    height: 3px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transition: transform 0.2s;
+  }
+
+  .module-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
+  .module-card:hover::before { transform: scaleX(1); }
+
+  .module-icon { font-size: 32px; margin-bottom: 12px; }
+
+  .module-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .module-desc {
+    font-size: 13px;
+    color: var(--gray);
+    line-height: 1.5;
+  }
+
+  .module-progress {
+    margin-top: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .module-progress .bar {
+    flex:1; height: 4px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .module-progress .fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 2px;
+  }
+
+  .module-progress span {
+    font-size: 11px;
+    color: var(--gold);
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 1px;
+    min-width: 30px;
+    text-align: right;
+  }
+
+  /* TEORIA */
+  .theory-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 24px;
+  }
+
+  @media(max-width: 768px) {
+    .theory-layout { grid-template-columns: 1fr; }
+  }
+
+  .sidebar {
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    height: fit-content;
+    position: sticky;
+    top: 140px;
+  }
+
+  .sidebar-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .topic-list { list-style: none; }
+
+  .topic-item {
+    padding: 8px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--gray);
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .topic-item:hover { background: rgba(201,162,39,0.08); color: var(--white); }
+  .topic-item.active { background: rgba(201,162,39,0.15); color: var(--gold); }
+  .topic-item .dot { width:6px; height:6px; border-radius:50%; background: var(--gray); flex-shrink:0; }
+  .topic-item.done .dot { background: var(--green-light); }
+  .topic-item.active .dot { background: var(--gold); }
+
+  .content-panel {
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 32px;
+  }
+
+  .content-panel h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .content-panel .subtitle {
+    font-size: 13px;
+    color: var(--gray);
+    letter-spacing: 1px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .theory-text h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin: 24px 0 10px;
+  }
+
+  .theory-text p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .theory-text ul {
+    margin: 10px 0 16px 20px;
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .formula-box {
+    background: rgba(201,162,39,0.06);
+    border: 1px solid rgba(201,162,39,0.3);
+    border-left: 3px solid var(--gold);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    letter-spacing: 1px;
+    color: var(--gold-light);
+  }
+
+  .tip-box {
+    background: rgba(13,124,69,0.1);
+    border: 1px solid rgba(13,124,69,0.3);
+    border-left: 3px solid var(--green-light);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 14px;
+    color: #86efac;
+  }
+
+  .tip-box strong { color: var(--green-light); }
+
+  .nav-theory {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* EXERCÍCIOS */
+  .question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+  }
+
+  .question-meta {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .badge {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+
+  .badge-math { background: rgba(59,130,246,0.15); color: #93c5fd; border: 1px solid rgba(59,130,246,0.3); }
+  .badge-port { background: rgba(139,92,246,0.15); color: #c4b5fd; border: 1px solid rgba(139,92,246,0.3); }
+  .badge-easy { background: rgba(13,124,69,0.15); color: #86efac; border: 1px solid rgba(13,124,69,0.3); }
+  .badge-med { background: rgba(201,162,39,0.15); color: var(--gold-light); border: 1px solid rgba(201,162,39,0.3); }
+  .badge-hard { background: rgba(185,28,28,0.15); color: #fca5a5; border: 1px solid rgba(185,28,28,0.3); }
+
+  .question-counter {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--gold);
+    letter-spacing: 2px;
+  }
+
+  .question-box {
+    background: var(--navy);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px;
+    margin-bottom: 24px;
+  }
+
+  .question-text {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--white);
+    margin-bottom: 24px;
+  }
+
+  .options-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+  .option-btn {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 14px 18px;
+    text-align: left;
+    cursor: pointer;
+    color: var(--text);
+    font-size: 15px;
+    font-family: 'Barlow', sans-serif;
+    transition: all 0.15s;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .option-btn:hover { background: rgba(201,162,39,0.1); border-color: rgba(201,162,39,0.3); }
+  .option-btn.selected { background: rgba(201,162,39,0.2); border-color: var(--gold); color: var(--white); }
+  .option-btn.correct { background: rgba(13,124,69,0.2); border-color: var(--green-light); color: #86efac; }
+  .option-btn.wrong { background: rgba(185,28,28,0.2); border-color: #fca5a5; color: #fca5a5; }
+
+  .option-letter {
+    font-family: 'Bebas Neue', sans-serif;
+    color: var(--gold);
+    font-size: 18px;
+  }
+
+  .feedback-box {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 18px;
+    margin-top: 20px;
+    display: none;
+    animation: fadeIn 0.3s;
+  }
+
+  .feedback-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .feedback-title.correct { color: #86efac; }
+  .feedback-title.wrong { color: #fca5a5; }
+  .feedback-text { font-size: 14px; line-height: 1.6; color: var(--gray); }
+
+  .action-btns {
+    display: flex; justify-content: flex-end; gap: 12px;
+  }
+
+  .btn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 2px;
+    padding: 10px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+
+  .btn-outline { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
+  .btn-outline:hover { background: rgba(201,162,39,0.1); }
+  .btn-solid { background: var(--gold); color: var(--navy); }
+  .btn-solid:hover { background: var(--gold-light); }
+
+  /* SIMULADO MENU */
+  .sim-menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .sim-card {
+    background: linear-gradient(135deg, var(--navy-mid) 0%, #152c50 100%);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  .sim-card:hover { transform: translateY(-3px); border-color: var(--gold); }
+  .sim-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--gold); letter-spacing: 2px; margin-bottom: 12px; }
+  .sim-card p { font-size: 13px; color: var(--gray); margin-bottom: 20px; }
+
+  .sim-info { display: flex; justify-content: center; gap: 24px; margin-bottom: 20px; }
+  .sim-info div { text-align: center; }
+  .sim-info .val { font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: var(--gold); line-height:1; }
+  .sim-info .lbl { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray); }
+
+  /* TIMER */
+  .timer-bar {
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .timer-display {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--gold);
+    letter-spacing: 2px;
+  }
+
+  .sim-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 24px;
+  }
+
+  .sim-nav {
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    height: fit-content;
+  }
+
+  .sim-nav-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+  }
+
+  .sim-nav-btn {
+    aspect-ratio: 1;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    color: var(--gray);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .sim-nav-btn.answered { background: rgba(201,162,39,0.2); color: var(--gold); border-color: var(--gold); }
+  .sim-nav-btn.active { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+
+  /* PROGRESSO */
+  .prog-card {
+    background: var(--navy-mid);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+
+  .prog-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    color: var(--white);
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 10px;
+  }
+
+  .prog-item { margin-bottom: 16px; }
+  .prog-item:last-child { margin-bottom: 0; }
+  .prog-item-head { display: flex; justify-content: space-between; font-size: 13px; color: var(--white); margin-bottom: 8px; }
+  .prog-bar-wrap { height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow:hidden; margin-bottom: 6px; }
+  .prog-bar-fill { height:100%; border-radius:3px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+  .prog-pct { font-size: 12px; color: var(--gold); font-family: 'Barlow Condensed', sans-serif; }
+
+  .history-table { width: 100%; border-collapse: collapse; }
+  .history-table th {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gray);
+    text-align: left;
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .history-table td {
+    padding: 14px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 14px;
+    color: var(--text);
+  }
+  .history-table tr:last-child td { border-bottom: none; }
+
+</style>
 </head>
 <body>
 
-<header>
-    <h1>⚓ Fuzileiro 2027</h1>
-</header>
-<div class="painel-status">
-    QUESTÕES RESOLVIDAS: <span id="txt-respondidas">0</span> / 20 
-    <span class="xp-text">XP: <span id="txt-xp">0</span></span>
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-emblem">FN</div>
+    <h2>ACESSO RESTRITO</h2>
+    <p>Portal do Candidato</p>
+    <div class="login-input-wrap">
+      <input type="password" id="pwInput" class="login-input" placeholder="Digite a senha de acesso" onkeypress="if(event.key === 'Enter') checkLogin()">
+      <button class="toggle-pw" onclick="togglePw()">👁</button>
+    </div>
+    <button class="login-btn" onclick="checkLogin()">ENTRAR</button>
+    <div class="login-error" id="loginError">Senha incorreta. Acesso negado.</div>
+    <div class="login-hint">Ambiente exclusivo de treinamento.</div>
+  </div>
 </div>
 
-<div class="menu">
-    <button class="aba-btn ativa" onclick="mudarAba('treino')">📝 TREINAMENTO</button>
-    <button class="aba-btn" onclick="mudarAba('teoria')">📖 TEORIA</button>
-    <button class="aba-btn" onclick="mudarAba('config')">⚙️ OPÇÕES</button>
-</div>
+<div id="appContent">
+  <header>
+    <div class="header-inner">
+      <div class="logo-emblem">FN</div>
+      <div class="header-title">
+        <h1>MISSÃO FUZILEIRO 2027</h1>
+        <p>Candidato: Renan Almeida</p>
+      </div>
+      <div class="progress-bar-wrap">
+        <span class="xp-label">XP: <span id="xpDisplay">0</span></span>
+        <div class="progress-bar"><div class="progress-fill" id="xpBar" style="width:0%"></div></div>
+      </div>
+    </div>
+  </header>
 
-<div class="container">
-    
-    <div id="treino" class="secao ativa">
-        <div id="lista-questoes"></div>
+  <nav>
+    <div class="nav-inner">
+      <button class="nav-btn active" onclick="showSection('dashboard', this)">Visão Geral</button>
+      <button class="nav-btn" onclick="showSection('teoria', this)">Apostila Digital</button>
+      <button class="nav-btn" onclick="showSection('exercicios', this)">Treinamento</button>
+      <button class="nav-btn" onclick="showSection('simulado', this)">Simulados</button>
+      <button class="nav-btn" onclick="showSection('progresso', this)">Meu Desempenho</button>
+    </div>
+  </nav>
+
+  <main>
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="section active">
+      <div class="welcome-banner">
+        <h2>AD SUMUS, RENAN!</h2>
+        <p>Este é o seu centro de comando. Siga o cronograma, mantenha a disciplina nos estudos e garanta sua vaga. O suor poupa o sangue.</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number" id="dashTotalQ">0</div>
+          <div class="stat-label">Questões Resolvidas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="dashHitRate">0%</div>
+          <div class="stat-label">Taxa de Acerto</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="dashSims">0</div>
+          <div class="stat-label">Simulados Feitos</div>
+        </div>
+      </div>
+
+      <h3 style="color:var(--gold); font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:1px; margin-bottom:16px;">Módulos de Estudo</h3>
+      <div class="modules-grid">
+        <div class="module-card" onclick="showSection('teoria',document.querySelectorAll('.nav-btn')[1]); setTopic('mat','basica')">
+          <div class="module-icon">🔢</div>
+          <div class="module-title">Matemática</div>
+          <div class="module-desc">Aritmética, álgebra, geometria, porcentagem, razão e proporção, equações e muito mais.</div>
+          <div class="module-progress">
+            <div class="bar"><div class="fill" id="pMat" style="width:0%"></div></div>
+            <span id="pMatLbl">0%</span>
+          </div>
+        </div>
+        <div class="module-card" onclick="showSection('teoria',document.querySelectorAll('.nav-btn')[1]); setTopic('port','ortografia')">
+          <div class="module-icon">📖</div>
+          <div class="module-title">Língua Portuguesa</div>
+          <div class="module-desc">Gramática, interpretação de texto, sintaxe, crase, concordância e redação oficial.</div>
+          <div class="module-progress">
+            <div class="bar"><div class="fill" id="pPort" style="width:0%"></div></div>
+            <span id="pPortLbl">0%</span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div id="teoria" class="secao">
-        <div class="card">
-            <h2>💡 Regras de Ouro - Português</h2>
-            <p><strong>1. Crase:</strong> Substitua a palavra por uma masculina. Se virar "AO", tem crase. (Ex: Vou à base -> Vou ao quartel).</p>
-            <p><strong>2. Verbo Haver:</strong> No sentido de existir não tem plural. (Ex: Havia muitos fuzileiros).</p>
-            <p><strong>3. Porquês:</strong> Por que (Pergunta), Porque (Resposta), Porquê (Motivo), Por quê (Final de frase).</p>
+    <!-- TEORIA -->
+    <div id="teoria" class="section">
+      <div class="theory-layout">
+        <div class="sidebar">
+          <div class="sidebar-title">Matemática</div>
+          <ul class="topic-list" id="listMat"></ul>
+          <div class="sidebar-title" style="margin-top:20px;">Português</div>
+          <ul class="topic-list" id="listPort"></ul>
         </div>
-        <div class="card">
-            <h2>📐 Regras de Ouro - Matemática</h2>
-            <p><strong>1. Frações:</strong> A palavra "DE" significa multiplicar. (Ex: 1/2 de 100 = 50).</p>
-            <p><strong>2. Regra de Três Inversa:</strong> Mais homens trabalhando = menos tempo gasto. Multiplique reto, não cruzado.</p>
-            <p><strong>3. Geometria:</strong> Área do Triângulo é Base x Altura dividido por 2. Não esqueça de dividir!</p>
+        <div class="content-panel">
+          <h2 id="theoryTitle">Selecione um tópico</h2>
+          <div class="subtitle" id="theorySubtitle">Módulo de Estudo</div>
+          <div class="theory-text" id="theoryContent">
+            <p style="color:var(--gray)">Utilize o menu lateral para navegar pelo edital completo.</p>
+          </div>
+          <div class="nav-theory">
+            <button class="btn btn-outline" onclick="markTopicDone()">✔ MARCAR COMO LIDO</button>
+            <button class="btn btn-solid" onclick="startPracticeFromTheory()">PRATICAR ASSUNTO</button>
+          </div>
         </div>
+      </div>
     </div>
 
-    <div id="config" class="secao">
-        <div class="card">
-            <h2>Progresso do Aluno</h2>
-            <p>O aplicativo salva o progresso do Renan automaticamente no celular. Se ele quiser refazer as questões para treinar de novo, clique no botão abaixo para zerar a pontuação.</p>
-            <button class="btn-reset" onclick="resetarProgresso()">⚠️ ZERAR PROGRESSO E REFAZER PROVA</button>
+    <!-- EXERCÍCIOS -->
+    <div id="exercicios" class="section">
+      <div id="practiceConfig">
+        <h2 style="font-family:'Bebas Neue'; font-size:28px; color:var(--gold); margin-bottom:20px;">Treinamento Focado</h2>
+        <div class="sim-menu">
+          <div class="sim-card" onclick="startPractice('mat')">
+            <h3>Matemática</h3>
+            <p>Bateria de questões apenas de cálculos e raciocínio lógico.</p>
+            <button class="btn btn-outline">INICIAR</button>
+          </div>
+          <div class="sim-card" onclick="startPractice('port')">
+            <h3>Português</h3>
+            <p>Bateria focada em gramática e interpretação.</p>
+            <button class="btn btn-outline">INICIAR</button>
+          </div>
+          <div class="sim-card" onclick="startPractice('all')">
+            <h3>Mix Completo</h3>
+            <p>Questões aleatórias de ambas as matérias.</p>
+            <button class="btn btn-solid">INICIAR</button>
+          </div>
         </div>
+      </div>
+
+      <div id="practiceArea" style="display:none;">
+        <div class="question-header">
+          <div class="question-meta">
+            <span class="badge badge-math" id="qBadgeSubj">MATEMÁTICA</span>
+            <span class="badge badge-med" id="qBadgeDiff">MÉDIO</span>
+          </div>
+          <div class="question-counter" id="qCounter">Questão 1/10</div>
+        </div>
+
+        <div class="question-box">
+          <div class="question-text" id="qText">Carregando...</div>
+          <ul class="options-list" id="qOptions"></ul>
+        </div>
+
+        <div class="feedback-box" id="qFeedback">
+          <div class="feedback-title" id="qFbTitle">CORRETO!</div>
+          <div class="feedback-text" id="qFbText">Explicação aqui.</div>
+        </div>
+
+        <div class="action-btns" style="margin-top:24px;">
+          <button class="btn btn-outline" onclick="quitPractice()">ENCERRAR</button>
+          <button class="btn btn-solid" id="btnNext" onclick="nextQuestion()" style="display:none;">PRÓXIMA</button>
+        </div>
+      </div>
     </div>
 
+    <!-- SIMULADO -->
+    <div id="simulado" class="section">
+      <div id="simConfig">
+        <h2 style="font-family:'Bebas Neue'; font-size:28px; color:var(--gold); margin-bottom:20px;">Simulados Oficiais</h2>
+        <div class="sim-menu">
+          <div class="sim-card" onclick="startSim(25, 90)">
+            <h3>Simulado Rápido (Meia Prova)</h3>
+            <p>25 questões variadas. Ideal para treinos diários rápidos.</p>
+            <div class="sim-info">
+              <div><div class="val">25</div><div class="lbl">Questões</div></div>
+              <div><div class="val">90</div><div class="lbl">Minutos</div></div>
+            </div>
+            <button class="btn btn-outline">INICIAR</button>
+          </div>
+          <div class="sim-card" onclick="startSim(50, 180)">
+            <h3>Simulado Real (Prova Completa)</h3>
+            <p>50 questões. 3 horas. Formato exato do dia do concurso.</p>
+            <div class="sim-info">
+              <div><div class="val">50</div><div class="lbl">Questões</div></div>
+              <div><div class="val">180</div><div class="lbl">Minutos</div></div>
+            </div>
+            <button class="btn btn-solid">INICIAR</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="simArea" style="display:none;">
+        <div class="timer-bar">
+          <div style="font-family:'Barlow Condensed'; font-size:14px; letter-spacing:2px; color:var(--gray); text-transform:uppercase;">Tempo Restante</div>
+          <div class="timer-display" id="simTimer">03:00:00</div>
+          <button class="btn btn-outline" onclick="finishSim()">ENTREGAR PROVA</button>
+        </div>
+
+        <div class="sim-grid">
+          <div class="sim-nav">
+            <div style="font-family:'Barlow Condensed'; font-size:12px; letter-spacing:2px; color:var(--gold); margin-bottom:12px;">GABARITO</div>
+            <div class="sim-nav-grid" id="simNavGrid"></div>
+          </div>
+          <div>
+            <div class="question-header">
+              <div class="question-meta"><span class="badge" id="simBadge">MATEMÁTICA</span></div>
+              <div class="question-counter" id="simCounter">Questão 1</div>
+            </div>
+            <div class="question-box">
+              <div class="question-text" id="simText">Carregando...</div>
+              <ul class="options-list" id="simOptions"></ul>
+            </div>
+            <div class="action-btns">
+              <button class="btn btn-outline" onclick="prevSimQ()">ANTERIOR</button>
+              <button class="btn btn-solid" onclick="nextSimQ()">PRÓXIMA</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="simResult" style="display:none;">
+        <div class="welcome-banner" style="text-align:center;">
+          <h2 id="resTitle">SIMULADO CONCLUÍDO</h2>
+          <p id="resSub">Avaliando desempenho...</p>
+        </div>
+        <div class="stats-grid" style="justify-content:center;">
+          <div class="stat-card">
+            <div class="stat-number" id="resScore">0/50</div>
+            <div class="stat-label">Acertos</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="resPct" style="color:#86efac;">0%</div>
+            <div class="stat-label">Aproveitamento</div>
+          </div>
+        </div>
+        <div style="text-align:center; margin-top:30px;">
+          <button class="btn btn-solid" onclick="showSection('dashboard', document.querySelectorAll('.nav-btn')[0])">VOLTAR AO INÍCIO</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROGRESSO -->
+    <div id="progresso" class="section">
+      <div class="prog-card">
+        <h2 class="prog-title">Leitura do Edital</h2>
+        <div class="prog-item">
+          <div class="prog-item-head"><span>Matemática</span><span class="prog-pct" id="prMatTxt">0%</span></div>
+          <div class="prog-bar-wrap"><div class="prog-bar-fill" id="prMatBar" style="width:0%"></div></div>
+        </div>
+        <div class="prog-item">
+          <div class="prog-item-head"><span>Língua Portuguesa</span><span class="prog-pct" id="prPortTxt">0%</span></div>
+          <div class="prog-bar-wrap"><div class="prog-bar-fill" id="prPortBar" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <div class="prog-card">
+        <h2 class="prog-title">Histórico de Simulados</h2>
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Tipo</th>
+              <th>Acertos</th>
+              <th>Nota</th>
+              <th>Situação</th>
+            </tr>
+          </thead>
+          <tbody id="historyTableBody">
+            <tr><td colspan="5" style="text-align:center; color:var(--gray);">Nenhum simulado realizado ainda.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
 </div>
 
 <script>
-    // 1. BANCO DE QUESTÕES (Sem erros de sintaxe)
-    const bancoQuestoes = [
-        { materia: "PORTUGUÊS - CRASE", pergunta: "Assinale a alternativa onde o uso da crase está CORRETO:", alts: ["A) O recruta andou à pé até o batalhão.", "B) O capitão referiu-se à missão de resgate.", "C) Começaremos o treino à partir das 06h.", "D) Entregue o fuzil à ele."], correta: 1, exp: "Correto: B. Quem se refere, refere-se A algo. 'Missão' é feminino. A+A = À. Nunca use crase antes de palavras masculinas (pé/ele) ou verbos (partir)." },
-        { materia: "MATEMÁTICA - FRAÇÕES", pergunta: "Um pelotão consumiu 1/4 da água no primeiro dia e 1/3 no segundo dia. Que fração da água ainda RESTA?", alts: ["A) 7/12", "B) 2/7", "C) 5/12", "D) 1/12"], correta: 2, exp: "Correto: C. Somando o consumo (1/4 + 1/3) tiramos o MMC (12). Fica 3/12 + 4/12 = 7/12 consumidos. Restam 5/12." },
-        { materia: "MATEMÁTICA - REGRA DE 3", pergunta: "Se 12 fuzileiros constroem uma trincheira em 5 dias, em quantos dias 4 fuzileiros construiriam a mesma trincheira?", alts: ["A) 15 dias", "B) 1,6 dias", "C) 10 dias", "D) 20 dias"], correta: 0, exp: "Correto: A. Regra Inversa! Se a equipe diminuiu 3 vezes (12 para 4), o tempo aumenta 3 vezes (5 para 15)." },
-        { materia: "PORTUGUÊS - CONCORDÂNCIA", pergunta: "Assinale a alternativa INCORRETA quanto à concordância verbal:", alts: ["A) Faz dois anos que não o vejo.", "B) Haviam muitos marinheiros no pátio.", "C) Mais de um soldado foi promovido.", "D) Fui eu quem fez o relatório."], correta: 1, exp: "Correto: B. O verbo HAVER no sentido de existir não vai para o plural. O certo é 'HAVIA muitos marinheiros'." },
-        { materia: "MATEMÁTICA - PORCENTAGEM", pergunta: "Um Batalhão possui 500 fuzileiros. Sabendo que 15% deles viajaram, quantos fuzileiros PERMANECERAM na base?", alts: ["A) 75", "B) 425", "C) 400", "D) 385"], correta: 1, exp: "Correto: B. 10% de 500 é 50. 5% é 25. Logo, 15% = 75 viajaram. Ficaram: 500 - 75 = 425." },
-        { materia: "PORTUGUÊS - ACENTUAÇÃO", pergunta: "Assinale a alternativa em que todas as palavras estão acentuadas corretamente pela mesma regra:", alts: ["A) Café, Cipó, Tático", "B) Marinha, História, Herói", "C) Água, Série, Próprio", "D) Lâmpada, Exército, Pátio"], correta: 2, exp: "Correto: C. Água, Série e Próprio são todas PAROXÍTONAS terminadas em ditongo." },
-        { materia: "MATEMÁTICA - EQUAÇÃO 1º GRAU", pergunta: "Qual o valor de X na equação: 3x + 15 = x + 35?", alts: ["A) 5", "B) 10", "C) 15", "D) 20"], correta: 1, exp: "Correto: B. Letra para um lado, número para o outro. 3x - x = 35 - 15. Fica 2x = 20. Logo, x = 10." },
-        { materia: "PORTUGUÊS - PORQUÊS", pergunta: "Complete corretamente: ____ os fuzileiros se atrasaram? Não sei o ____ de tanta demora.", alts: ["A) Por que - porquê", "B) Porque - por que", "C) Por quê - porquê", "D) Por que - porque"], correta: 0, exp: "Correto: A. Início de pergunta usa 'Por que' (separado). Quando significa 'o motivo', usa-se 'porquê' (junto e com acento)." },
-        { materia: "MATEMÁTICA - PERÍMETRO", pergunta: "Um campo retangular possui 30m de comprimento e 20m de largura. Qual é o perímetro total?", alts: ["A) 50m", "B) 100m", "C) 600m", "D) 120m"], correta: 1, exp: "Correto: B. Perímetro é a soma de TODOS os lados: 30 + 30 + 20 + 20 = 100m." },
-        { materia: "PORTUGUÊS - TEMPOS VERBAIS", pergunta: "Na frase 'Se o recruta ESTUDASSE mais, PASSARIA', os verbos estão, respectivamente, no:", alts: ["A) Pretérito Perfeito e Futuro", "B) Pretérito Imperfeito do Subjuntivo e Futuro do Pretérito", "C) Presente e Imperfeito", "D) Mais-Que-Perfeito e Futuro"], correta: 1, exp: "Correto: B. Terminou em -SSE é hipótese (Subjuntivo). Terminou em -RIA é Futuro do Pretérito." },
-        { materia: "MATEMÁTICA - ÁREA CÍRCULO", pergunta: "Um heliponto tem raio de 10m. Qual a área? (Use Pi = 3,14)", alts: ["A) 31,4 m²", "B) 62,8 m²", "C) 314 m²", "D) 100 m²"], correta: 2, exp: "Correto: C. Fórmula: Pi x Raio². Ou seja: 3,14 x (10 x 10) = 314 m²." },
-        { materia: "PORTUGUÊS - PONTUAÇÃO", pergunta: "Assinale a alternativa em que a vírgula foi empregada CORRETAMENTE para separar o vocativo:", alts: ["A) O comandante disse que, fuzileiros, estão prontos.", "B) Fuzileiro, apresente sua arma.", "C) A arma, do fuzileiro, está limpa.", "D) Nós fomos, até a base."], correta: 1, exp: "Correto: B. O vocativo (quando você chama alguém) SEMPRE deve estar separado por vírgula." },
-        { materia: "MATEMÁTICA - VOLUME", pergunta: "Uma caixa d'água tem 2m de comp, 3m de larg e 1m de alt. Qual a capacidade em litros?", alts: ["A) 600 L", "B) 6.000 L", "C) 60.000 L", "D) 5.000 L"], correta: 1, exp: "Correto: B. Volume = 2 x 3 x 1 = 6m³. Cada m³ tem 1.000 litros, logo, 6.000 Litros." },
-        { materia: "PORTUGUÊS - PLURAL", pergunta: "Qual é o plural de: CIDADÃO, TROFÉU e CORONEL?", alts: ["A) Cidadões, Troféus, Coroneis", "B) Cidadãos, Troféus, Coronéis", "C) Cidadãos, Troféis, Coronéis", "D) Cidadões, Troféis, Coroneis"], correta: 1, exp: "Correto: B. Cidadão vira Cidadãos. Troféu vira Troféus. Coronel troca EL por EIS (Coronéis)." },
-        { materia: "MATEMÁTICA - JUROS", pergunta: "Um militar emprestou R$ 1.000 a juros simples de 5% ao mês. Qual o valor dos JUROS após 2 meses?", alts: ["A) R$ 100", "B) R$ 50", "C) R$ 1.100", "D) R$ 150"], correta: 0, exp: "Correto: A. 5% de 1000 é 50 por mês. Em dois meses, os juros são R$ 100." },
-        { materia: "PORTUGUÊS - PRONOMES", pergunta: "Assinale a frase INCORRETA segundo a norma culta:", alts: ["A) Não me diga isso.", "B) Entregar-lhe-ei o relatório amanhã.", "C) Me passe o fuzil, soldado.", "D) O recruta sentou-se exausto."], correta: 2, exp: "Correto: C. Nunca se começa frase com pronome oblíquo (Me, Te, Se). O certo é: 'Passe-me o fuzil'." },
-        { materia: "MATEMÁTICA - POTENCIAÇÃO", pergunta: "Resultado da expressão: √144 + 3³ ?", alts: ["A) 21", "B) 39", "C) 27", "D) 15"], correta: 1, exp: "Correto: B. Raiz de 144 é 12. O cubo de 3 (3x3x3) é 27. Somando: 12 + 27 = 39." },
-        { materia: "PORTUGUÊS - SINTAXE", pergunta: "Na frase 'Chegaram cedo os recrutas', qual é o sujeito?", alts: ["A) Sujeito Oculto", "B) Cedo", "C) Os recrutas", "D) Indeterminado"], correta: 2, exp: "Correto: C. Pergunte ao verbo: Quem chegou cedo? Resposta: 'Os recrutas'. Eles são o sujeito." },
-        { materia: "MATEMÁTICA - VELOCIDADE", pergunta: "Se um candidato percorre 30 km em exatos 30 minutos, qual foi sua velocidade média em km/h?", alts: ["A) 30 km/h", "B) 45 km/h", "C) 60 km/h", "D) 90 km/h"], correta: 2, exp: "Correto: C. Se ele faz 30km em meia hora, em uma hora inteira ele fará o dobro (60km)." },
-        { materia: "PORTUGUÊS - INTERPRETAÇÃO", pergunta: "A frase 'A disciplina torna grandes os pequenos batalhões' significa que:", alts: ["A) Batalhões pequenos são sempre fortes.", "B) A disciplina compensa a falta de soldados.", "C) Tropas grandes não têm disciplina.", "D) Foco só existe em grupos pequenos."], correta: 1, exp: "Correto: B. A frase diz que a disciplina dá a força de um exército gigante a um grupo pequeno." }
-    ];
+// ===================== DADOS =====================
+const TOPICS = {
+  mat: [
+    { id:'basica', label:'Números Naturais e Inteiros' },
+    { id:'fracoes', label:'Frações e Decimais' },
+    { id:'proporcao', label:'Razão e Proporção' },
+    { id:'regra3', label:'Regra de Três' },
+    { id:'porcentagem', label:'Porcentagem' },
+    { id:'equacoes', label:'Equações 1º e 2º Grau' },
+    { id:'geometria', label:'Geometria Plana e Espacial' }
+  ],
+  port: [
+    { id:'ortografia', label:'Ortografia e Acentuação' },
+    { id:'morfologia', label:'Morfologia' },
+    { id:'sintaxe', label:'Sintaxe e Concordância' },
+    { id:'crase', label:'Regência e Crase' },
+    { id:'pontuacao', label:'Pontuação' },
+    { id:'coesao', label:'Coesão e Coerência' },
+    { id:'redacao', label:'Redação Oficial' },
+  ]
+};
 
-    // 2. SISTEMA DE PROGRESSO E SALVAMENTO BLINDADO
-    let progresso = { respondidas: [], acertos: 0, xp: 0 };
+const THEORY = {
+  basica: {
+    title: 'Números Naturais e Inteiros',
+    subtitle: 'Fundamentos da Aritmética | Matemática',
+    content: `
+      <h3>Conjuntos Numéricos</h3>
+      <p>Os números naturais (N) são {0, 1, 2, 3...}. Os inteiros (Z) incluem os negativos {...-2, -1, 0, 1, 2...}.</p>
+      <h3>Regra de Sinais</h3>
+      <ul>
+        <li>Multiplicação/Divisão: Sinais iguais = Positivo (+) | Sinais diferentes = Negativo (-)</li>
+        <li>Soma/Subtração: Sinais iguais (soma e repete o sinal) | Sinais diferentes (subtrai e dá o sinal do maior)</li>
+      </ul>
+      <div class="tip-box"><strong>💡 Dica:</strong> Cuidado com o zero! Ele não é nem positivo nem negativo.</div>
+    `
+  },
+  fracoes: {
+    title: 'Frações e Decimais',
+    subtitle: 'Aritmética | Matemática',
+    content: `
+      <h3>Operações Básicas</h3>
+      <ul>
+        <li><strong>Soma/Subtração:</strong> Só pode somar se os denominadores (baixo) forem iguais. Se forem diferentes, tem que tirar o MMC.</li>
+        <li><strong>Multiplicação:</strong> De cima com de cima, de baixo com de baixo (numerador x numerador, denominador x denominador).</li>
+        <li><strong>Divisão:</strong> Repete a primeira fração e multiplica pelo inverso da segunda.</li>
+      </ul>
+      <div class="formula-box">O "DE" na matemática vira MULTIPLICAÇÃO. Ex: 1/4 DE 100 = 1/4 x 100 = 25.</div>
+    `
+  },
+  geometria: {
+    title: 'Geometria Plana e Espacial',
+    subtitle: 'Matemática',
+    content: `
+      <h3>Áreas Planas</h3>
+      <ul>
+        <li><strong>Quadrado:</strong> Lado × Lado (L²)</li>
+        <li><strong>Retângulo:</strong> Base × Altura (b × h)</li>
+        <li><strong>Triângulo:</strong> (Base × Altura) / 2</li>
+        <li><strong>Círculo:</strong> π × r²</li>
+      </ul>
+      <h3>Cubo</h3>
+      <div class="formula-box">Volume = a³ &nbsp;&nbsp;|&nbsp;&nbsp; Área total = 6a² &nbsp;&nbsp;|&nbsp;&nbsp; Diagonal = a√3</div>
+      <h3>Paralelepípedo (Caixa)</h3>
+      <div class="formula-box">Volume = c × l × h &nbsp;&nbsp;|&nbsp;&nbsp; Área total = 2(cl + ch + lh)</div>
+      <h3>Cilindro</h3>
+      <div class="formula-box">Volume = π × r² × h &nbsp;&nbsp;|&nbsp;&nbsp; Área total = 2πr(r + h)</div>
+    `
+  },
+  ortografia: {
+    title: 'Ortografia e Acentuação',
+    subtitle: 'Regras Oficiais | Português',
+    content: `
+      <h3>Regras de Acentuação</h3>
+      <ul>
+        <li><strong>Oxítonas:</strong> Acentuam-se as terminadas em A, E, O, EM, ENS. Ex: <em>café, armazém, cipó</em>.</li>
+        <li><strong>Paroxítonas:</strong> Acentuam-se as que NÃO terminam em A, E, O, EM, ENS. Ex: <em>fácil, táxi, tórax</em>. Mas ATENÇÃO: acentuam-se as terminadas em ditongo. Ex: <em>história, água, série</em>.</li>
+        <li><strong>Proparoxítonas:</strong> TODAS são acentuadas: <em>médico, lâmpada, público</em></li>
+      </ul>
+      <div class="tip-box"><strong>💡 Dica:</strong> Paroxítonas são a maioria no português. Se termina em vogal simples sem acento, geralmente é paroxítona tônica normal (casa, vela, bolo).</div>
+    `
+  },
+  morfologia: {
+    title: 'Morfologia',
+    subtitle: 'Classes de Palavras | Português',
+    content: `
+      <h3>As 10 Classes Gramaticais</h3>
+      <ul>
+        <li><strong>Substantivo:</strong> nomeia seres (pessoa, lugar, coisa).</li>
+        <li><strong>Adjetivo:</strong> dá qualidade ao substantivo.</li>
+        <li><strong>Verbo:</strong> indica ação, estado ou fenômeno.</li>
+        <li><strong>Advérbio:</strong> modifica verbo, adjetivo ou advérbio (ideia de tempo, lugar, modo). É INVARIÁVEL (não vai pro plural).</li>
+        <li><strong>Pronome:</strong> substitui ou acompanha o nome.</li>
+      </ul>
+    `
+  },
+  sintaxe: {
+    title: 'Sintaxe e Concordância',
+    subtitle: 'Gramática | Português',
+    content: `
+      <h3>Concordância Verbal</h3>
+      <p>O verbo DEVE concordar com o núcleo do sujeito em número e pessoa.</p>
+      <ul>
+        <li><strong>Verbo HAVER (existir/tempo):</strong> Impessoal, fica SEMPRE no singular. Ex: <em>Havia muitos soldados. Faz dez anos.</em></li>
+        <li><strong>Fui EU que/quem:</strong> Com "que", o verbo concorda com "eu". Ex: <em>"Fui eu que falei."</em></li>
+      </ul>
+      <h3>Concordância Nominal</h3>
+      <p>Artigos, adjetivos, pronomes e numerais concordam em gênero e número com o substantivo.</p>
+      <div class="formula-box">
+        "Os soldados valentes" ✓ &nbsp;&nbsp; "As missões difíceis" ✓<br>
+        "Os soldado valente" ✗
+      </div>
+      <div class="tip-box"><strong>💡 Dica:</strong> Adjetivo posposto a substantivos de gêneros diferentes → fica no masculino plural. Ex: Arma e capacete <strong>novos</strong>.</div>
+    `
+  },
+  coesao: {
+    title: 'Coesão e Coerência',
+    subtitle: 'Textualidade | Português',
+    content: `
+      <h3>Coesão Textual</h3>
+      <p>São os mecanismos que ligam as palavras e frases (pronomes, conjunções). É a costura do texto.</p>
+      <h3>Coerência Textual</h3>
+      <p>É o sentido, a lógica do texto. Um texto coerente não tem contradições e faz sentido para o leitor.</p>
+      <div class="tip-box"><strong>⚠️ Cuidado na Interpretação:</strong> Responda apenas o que está NO TEXTO. Não extrapole com seus conhecimentos prévios. A Marinha quer saber a ideia do autor, não a sua.</div>
+    `
+  }
+};
 
-    function carregarDados() {
-        const salvo = localStorage.getItem('fuz_app_renan');
-        if (salvo) { progresso = JSON.parse(salvo); }
-        atualizarPainel();
-        renderizarQuestoes();
-    }
+const QUESTIONS = [
+  // MATEMÁTICA
+  { id:1, subj:'mat', diff:'facil', text:'Um Batalhão possui 500 fuzileiros. Sabendo que 15% deles estão em missão no exterior, quantos fuzileiros PERMANECERAM na base?', opts:['A) 75 fuzileiros','B) 425 fuzileiros','C) 400 fuzileiros','D) 385 fuzileiros'], answer:1, explain:'10% de 500 é 50. Logo, 5% é 25. Então, 15% = 75 (viajaram). Ficaram: 500 - 75 = 425 fuzileiros.' },
+  { id:2, subj:'mat', diff:'medio', text:'Se 12 fuzileiros constroem uma trincheira em 5 dias, em quantos dias 4 fuzileiros construiriam a mesma trincheira?', opts:['A) 15 dias','B) 1,6 dias','C) 10 dias','D) 20 dias'], answer:0, explain:'Regra de três INVERSA. Menos homens = mais tempo. 12x5 = 60. 60 / 4 = 15 dias.' },
+  { id:3, subj:'mat', diff:'facil', text:'Qual o valor de X na equação: 3x + 15 = x + 35?', opts:['A) 5','B) 10','C) 15','D) 20'], answer:1, explain:'3x - x = 35 - 15 -> 2x = 20 -> x = 10.' },
+  { id:4, subj:'mat', diff:'medio', text:'Um pelotão consumiu 1/4 da água no primeiro dia e 1/3 no segundo dia. Que fração da água ainda RESTA?', opts:['A) 7/12','B) 2/7','C) 5/12','D) 1/12'], answer:2, explain:'Soma do consumo: 1/4 + 1/3 (MMC 12) = 3/12 + 4/12 = 7/12. Se gastou 7 de 12, restam 5/12.' },
+  { id:5, subj:'mat', diff:'facil', text:'Um campo retangular possui 30 metros de comprimento e 20 metros de largura. Qual é o perímetro total?', opts:['A) 50 metros','B) 100 metros','C) 600 metros','D) 120 metros'], answer:1, explain:'Perímetro é a soma de TODOS os lados. 30 + 30 + 20 + 20 = 100 metros. (600 seria a área).' },
+  { id:6, subj:'mat', diff:'medio', text:'Um heliponto circular tem raio de 10m. Qual a área? (Use Pi = 3,14)', opts:['A) 31,4 m²','B) 62,8 m²','C) 314 m²','D) 100 m²'], answer:2, explain:'Área do círculo = Pi × R². 3,14 × (10)² = 3,14 × 100 = 314 m².' },
+  { id:7, subj:'mat', diff:'medio', text:'Uma caixa de água tem 2m de comprimento, 3m de largura e 1m de altura. Qual a capacidade em litros? (1m³ = 1000L)', opts:['A) 600 Litros','B) 6.000 Litros','C) 60.000 Litros','D) 5.000 Litros'], answer:1, explain:'Volume = 2 × 3 × 1 = 6m³. Multiplicando por 1000 = 6.000 Litros.' },
+  { id:8, subj:'mat', diff:'facil', text:'Um militar fez empréstimo de R$ 1.000 a juros simples de 5% ao mês. Qual o valor dos JUROS após 2 meses?', opts:['A) R$ 100,00','B) R$ 50,00','C) R$ 1.100,00','D) R$ 150,00'], answer:0, explain:'5% de 1000 é 50/mês. Em dois meses, 50 × 2 = R$ 100,00 de juros.' },
+  { id:9, subj:'mat', diff:'medio', text:'Qual é o resultado da expressão: √144 + 3³ ?', opts:['A) 21','B) 39','C) 27','D) 15'], answer:1, explain:'Raiz de 144 = 12. O cubo de 3 (3×3×3) = 27. 12 + 27 = 39.' },
+  { id:10, subj:'mat', diff:'medio', text:'Se um candidato percorre 30 km em exatos 30 minutos, qual foi sua velocidade média em km/h?', opts:['A) 30 km/h','B) 45 km/h','C) 60 km/h','D) 90 km/h'], answer:2, explain:'Se faz 30km em meia hora, em 1 hora inteira fará o dobro = 60km/h.' },
+  { id:11, subj:'mat', diff:'dificil', text:'A média aritmética de quatro notas é 7,5. Se as três primeiras notas são 8, 7 e 6, qual é a quarta nota?', opts:['A) 8','B) 9','C) 9,5','D) 10'], answer:1, explain:'Soma total = 7,5×4 = 30. Soma das três primeiras = 8+7+6 = 21. Quarta nota = 30−21 = 9.' },
+  { id:12, subj:'mat', diff:'medio', text:'Divida R$480 entre A, B e C em partes diretamente proporcionais a 2, 3 e 5. Quanto recebe o maior?', opts:['A) R$150','B) R$240','C) R$300','D) R$200'], answer:1, explain:'Total de partes = 2+3+5 = 10. 480 / 10 = 48 (cada parte). Maior recebe 5 partes = 5 × 48 = R$ 240.' },
+  { id:13, subj:'mat', diff:'dificil', text:'Um produto custa R$120. Sofre um aumento de 10% e, depois, um desconto de 10%. O valor final é:', opts:['A) R$120,00','B) R$118,80','C) R$121,20','D) R$110,00'], answer:1, explain:'Aumento de 10%: 120 + 12 = 132. Desconto de 10% sobre 132 = 13,20. 132 - 13,20 = 118,80.' },
+  
+  // PORTUGUÊS
+  { id:14, subj:'port', diff:'facil', text:'Assinale a alternativa onde o uso da crase está CORRETO:', opts:['A) O recruta andou à pé.','B) Ele referiu-se à missão.','C) Treino à partir de hoje.','D) Entregue à ele.'], answer:1, explain:'Quem se refere, refere-se A (algo). Missão aceita o artigo A. A+A=À. Nunca use crase antes de masc. (pé/ele) ou verbos (partir).' },
+  { id:15, subj:'port', diff:'facil', text:'Assinale a alternativa em que todas as palavras estão acentuadas corretamente pela mesma regra:', opts:['A) Café, Cipó, Tático','B) Marinha, História, Herói','C) Água, Série, Próprio','D) Lâmpada, Exército, Pátio'], answer:2, explain:'Água, série e próprio são paroxítonas terminadas em ditongo.' },
+  { id:16, subj:'port', diff:'medio', text:'Complete: ____ os fuzileiros se atrasaram? Não sei o ____ da demora.', opts:['A) Por que - porquê','B) Porque - por que','C) Por quê - porquê','D) Por que - porque'], answer:0, explain:'Início de interrogativa: Por que (separado). "O motivo" usa "o porquê" (junto com acento).' },
+  { id:17, subj:'port', diff:'medio', text:'Na frase "Se ele ESTUDASSE, PASSARIA", os verbos estão no:', opts:['A) Pretérito Perfeito e Futuro','B) Imperfeito do Subjuntivo e Futuro do Pretérito','C) Presente e Imperfeito','D) Mais-Que-Perfeito e Futuro'], answer:1, explain:'Terminação -SSE indica hipótese (Imp. Subjuntivo). Terminação -RIA é Futuro do Pretérito (condicionado).' },
+  { id:18, subj:'port', diff:'medio', text:'Na frase "Chegaram cedo as novas recrutas", qual é o núcleo do sujeito?', opts:['A) Chegaram','B) Cedo','C) Novas','D) Recrutas'], answer:3, explain:'Quem chegou cedo? "As novas recrutas" (Sujeito). O núcleo (palavra principal) é o substantivo "recrutas".' },
+  { id:19, subj:'port', diff:'facil', text:'A palavra "corajoso" na frase "O fuzileiro corajoso cumpriu a missão" é:', opts:['A) Objeto direto','B) Predicativo do sujeito','C) Adjunto adnominal','D) Adjunto adverbial'], answer:2, explain:'"Corajoso" qualifica o substantivo "fuzileiro", sendo um ADJUNTO ADNOMINAL — modifica o núcleo do sujeito.' },
+  { id:20, subj:'port', diff:'dificil', text:'Em "Precisa-se de soldados disciplinados", o verbo "precisa-se" indica:', opts:['A) Voz passiva reflexiva','B) Sujeito indeterminado','C) Voz passiva analítica','D) Oração sem sujeito'], answer:1, explain:'Quando "se" é índice de indeterminação do sujeito, o verbo fica no singular mesmo com complemento no plural. O sujeito está indeterminado.' },
+  { id:21, subj:'port', diff:'facil', text:'Assinale a frase INCORRETA quanto à colocação pronominal:', opts:['A) Não me diga isso.','B) Entregar-lhe-ei o relatório.','C) Me passe o fuzil.','D) O recruta sentou-se exausto.'], answer:2, explain:'Não se inicia frase formal com pronome oblíquo (Me, Te, Se). O correto: "Passe-me o fuzil".' },
+  { id:22, subj:'port', diff:'facil', text:'O plural de CIDADÃO, TROFÉU e CORONEL é:', opts:['A) Cidadões, Troféus, Coroneis','B) Cidadãos, Troféus, Coronéis','C) Cidadãos, Troféis, Coronéis','D) Cidadões, Troféis, Coroneis'], answer:1, explain:'Cidadão -> Cidadãos. Troféu -> Troféus. Coronel -> Coronéis (-el vira -éis).' },
+  { id:23, subj:'port', diff:'medio', text:'Qual figura de linguagem existe na frase "O soldado foi um leão na batalha"?', opts:['A) Eufemismo','B) Paradoxo','C) Metáfora','D) Hipérbole'], answer:2, explain:'Metáfora é uma comparação implícita. Transferiu a característica de ferocidade do leão para o soldado sem usar o "como".' },
+  { id:24, subj:'port', diff:'facil', text:'Assinale a vírgula CORRETA separando o vocativo:', opts:['A) Fuzileiros, o batalhão está pronto.','B) O comandante, fuzileiro chamou.','C) As armas, do fuzileiro estão limpas.','D) Marchamos, pela manhã.'], answer:0, explain:'Vocativo é um chamamento ("Fuzileiros"). Ele sempre deve ser isolado por vírgulas.' },
+  { id:25, subj:'port', diff:'dificil', text:'"A disciplina torna grandes os pequenos batalhões". Significa que:', opts:['A) Batalhões pequenos são sempre fortes.','B) A disciplina compensa o tamanho do grupo.','C) Tropas grandes não têm disciplina.','D) Apenas pequenos grupos têm foco.'], answer:1, explain:'Interpretação: a disciplina age como um multiplicador de força, tornando um contingente pequeno em algo grande/forte.' }
+];
 
-    function salvarDados() {
-        localStorage.setItem('fuz_app_renan', JSON.stringify(progresso));
-        atualizarPainel();
-    }
+// ===================== ESTADO =====================
+let state = {
+  xp: 0,
+  topicsDone: [],
+  simHistory: [],
+  currentTopicIdx: 0,
+  currentSubject: 'mat',
+  practicePool: [],
+  practiceQIndex: 0,
+  
+  simPool: [],
+  simAnswers: [],
+  simTimer: null,
+  simTimeRemaining: 0,
+  simCurrentQ: 0
+};
 
-    function atualizarPainel() {
-        document.getElementById('txt-respondidas').innerText = progresso.respondidas.length;
-        document.getElementById('txt-xp').innerText = progresso.xp;
-    }
+// ===================== CORE / INIT =====================
+function init() {
+  updateDashboard();
+  updateProgressPage();
+}
 
-    // 3. RENDERIZAÇÃO DA TELA
-    function mudarAba(abaId) {
-        document.querySelectorAll('.secao').forEach(s => s.classList.remove('ativa'));
-        document.querySelectorAll('.aba-btn').forEach(b => b.classList.remove('ativa'));
-        document.getElementById(abaId).classList.add('ativa');
-        event.currentTarget.classList.add('ativa');
-    }
+function showSection(id, btnObj) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(btnObj) {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    btnObj.classList.add('active');
+  }
+}
 
-    function renderizarQuestoes() {
-        const divLista = document.getElementById('lista-questoes');
-        divLista.innerHTML = '';
+function addXP(amount) {
+  state.xp += amount;
+  document.getElementById('xpDisplay').innerText = state.xp;
+  let pct = Math.min((state.xp / 5000)*100, 100);
+  document.getElementById('xpBar').style.width = pct + '%';
+}
 
-        bancoQuestoes.forEach((q, qIndex) => {
-            const jaRespondeu = progresso.respondidas.some(r => r.id === qIndex);
-            const respostaSalva = jaRespondeu ? progresso.respondidas.find(r => r.id === qIndex) : null;
-            
-            let html = `
-            <div class="card">
-                <span class="badge">${q.materia}</span>
-                <p class="pergunta">${qIndex + 1}. ${q.pergunta}</p>
-            `;
+function updateDashboard() {
+  document.getElementById('dashTotalQ').innerText = state.xp / 10; 
+  let sims = state.simHistory.length;
+  document.getElementById('dashSims').innerText = sims;
+  
+  if(sims > 0) {
+    let avg = state.simHistory.reduce((acc, h) => acc + h.pct, 0) / sims;
+    document.getElementById('dashHitRate').innerText = Math.round(avg) + '%';
+  }
 
-            q.alts.forEach((alt, aIndex) => {
-                let corBtn = '';
-                if (jaRespondeu) {
-                    if (aIndex === q.correta) corBtn = 'background: var(--verde); border-color: var(--verde);';
-                    else if (aIndex === respostaSalva.escolha) corBtn = 'background: var(--vermelho); border-color: var(--vermelho);';
-                }
+  // Update modules progress (teoria lida)
+  let matDone = state.topicsDone.filter(t => t.startsWith('mat_')).length;
+  let portDone = state.topicsDone.filter(t => t.startsWith('port_')).length;
+  
+  let pMat = Math.round((matDone / TOPICS.mat.length) * 100) || 0;
+  let pPort = Math.round((portDone / TOPICS.port.length) * 100) || 0;
 
-                html += `<button class="alt-btn" style="${corBtn}" onclick="responder(${qIndex}, ${aIndex})" ${jaRespondeu ? 'disabled' : ''}>${alt}</button>`;
-            });
+  document.getElementById('pMat').style.width = pMat + '%';
+  document.getElementById('pMatLbl').innerText = pMat + '%';
+  document.getElementById('pPort').style.width = pPort + '%';
+  document.getElementById('pPortLbl').innerText = pPort + '%';
+}
 
-            if (jaRespondeu) {
-                const acertou = respostaSalva.escolha === q.correta;
-                html += `
-                <div class="feedback" style="display:block; background: ${acertou ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.1)'}; color: ${acertou ? '#4ade80' : '#fca5a5'};">
-                    ${acertou ? '✅' : '❌'} ${q.exp}
-                </div>`;
-            }
+// ===================== TEORIA =====================
+function renderTopicList() {
+  let lMat = document.getElementById('listMat');
+  let lPort = document.getElementById('listPort');
+  lMat.innerHTML = ''; lPort.innerHTML = '';
 
-            html += `</div>`;
-            divLista.innerHTML += html;
-        });
-    }
+  TOPICS.mat.forEach((t, i) => {
+    let isDone = state.topicsDone.includes('mat_' + t.id);
+    let isActive = (state.currentSubject === 'mat' && state.currentTopicIdx === i);
+    lMat.innerHTML += `<li class="topic-item ${isDone?'done':''} ${isActive?'active':''}" onclick="setTopic('mat', '${t.id}')"><div class="dot"></div> ${t.label}</li>`;
+  });
 
-    // 4. LÓGICA DE RESPOSTA
-    window.responder = function(qIndex, altIndex) {
-        const q = bancoQuestoes[qIndex];
-        const acertou = (altIndex === q.correta);
-        
-        progresso.respondidas.push({ id: qIndex, escolha: altIndex });
-        if (acertou) {
-            progresso.acertos++;
-            progresso.xp += 150;
-        }
+  TOPICS.port.forEach((t, i) => {
+    let isDone = state.topicsDone.includes('port_' + t.id);
+    let isActive = (state.currentSubject === 'port' && state.currentTopicIdx === i);
+    lPort.innerHTML += `<li class="topic-item ${isDone?'done':''} ${isActive?'active':''}" onclick="setTopic('port', '${t.id}')"><div class="dot"></div> ${t.label}</li>`;
+  });
+}
 
-        salvarDados();
-        renderizarQuestoes();
-    }
+function setTopic(subj, id) {
+  state.currentSubject = subj;
+  let idx = TOPICS[subj].findIndex(x => x.id === id);
+  state.currentTopicIdx = idx;
+  renderTopicList();
+  
+  let content = THEORY[id];
+  if(content) {
+    document.getElementById('theoryTitle').innerText = content.title;
+    document.getElementById('theorySubtitle').innerText = content.subtitle;
+    document.getElementById('theoryContent').innerHTML = content.content;
+  } else {
+    document.getElementById('theoryTitle').innerText = TOPICS[subj][idx].label;
+    document.getElementById('theorySubtitle').innerText = 'Em Breve';
+    document.getElementById('theoryContent').innerHTML = '<p style="color:var(--gray)">Conteúdo em desenvolvimento.</p>';
+  }
+}
 
-    // 5. RESETAR PROGRESSO
-    window.resetarProgresso = function() {
-        if(confirm("Tem certeza? Isso vai zerar todo o XP e liberar as questões novamente!")) {
-            progresso = { respondidas: [], acertos: 0, xp: 0 };
-            salvarDados();
-            renderizarQuestoes();
-            mudarAba('treino');
-        }
-    }
+function markTopicDone() {
+  let tId = state.currentSubject + '_' + TOPICS[state.currentSubject][state.currentTopicIdx].id;
+  if(!state.topicsDone.includes(tId)) {
+    state.topicsDone.push(tId);
+    addXP(50);
+    renderTopicList();
+    updateDashboard();
+    updateProgressPage();
+    alert('+50 XP! Tópico marcado como lido.');
+  }
+}
 
-    // INICIA O APP
-    window.onload = carregarDados;
+function startPracticeFromTheory() {
+  startPractice(state.currentSubject);
+}
+
+// ===================== TREINAMENTO =====================
+function startPractice(subj) {
+  showSection('exercicios');
+  document.getElementById('practiceConfig').style.display = 'none';
+  document.getElementById('practiceArea').style.display = 'block';
+  
+  let pool = QUESTIONS.filter(q => subj === 'all' || q.subj === subj);
+  // shuffle
+  pool.sort(() => Math.random() - 0.5);
+  
+  state.practicePool = pool;
+  state.practiceQIndex = 0;
+  loadPracticeQ();
+}
+
+function loadPracticeQ() {
+  let q = state.practicePool[state.practiceQIndex];
+  if(!q) { quitPractice(); return; }
+
+  document.getElementById('qCounter').innerText = `Questão ${state.practiceQIndex + 1}/${state.practicePool.length}`;
+  
+  let bSubj = document.getElementById('qBadgeSubj');
+  if(q.subj === 'mat') { bSubj.innerText = 'MATEMÁTICA'; bSubj.className = 'badge badge-math'; }
+  else { bSubj.innerText = 'PORTUGUÊS'; bSubj.className = 'badge badge-port'; }
+
+  let bDiff = document.getElementById('qBadgeDiff');
+  bDiff.innerText = q.diff.toUpperCase();
+  bDiff.className = 'badge ' + (q.diff==='facil'?'badge-easy':q.diff==='medio'?'badge-med':'badge-hard');
+
+  document.getElementById('qText').innerText = q.text;
+  
+  let optsList = document.getElementById('qOptions');
+  optsList.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    let letter = opt.substring(0,2);
+    let text = opt.substring(2);
+    optsList.innerHTML += `<li class="option-btn" onclick="answerPractice(${i}, this)"><span class="option-letter">${letter}</span>${text}</li>`;
+  });
+
+  document.getElementById('qFeedback').style.display = 'none';
+  document.getElementById('btnNext').style.display = 'none';
+}
+
+function answerPractice(idx, btnObj) {
+  let q = state.practicePool[state.practiceQIndex];
+  let btns = document.getElementById('qOptions').querySelectorAll('.option-btn');
+  btns.forEach(b => { b.style.pointerEvents = 'none'; });
+
+  let fb = document.getElementById('qFeedback');
+  let fbT = document.getElementById('qFbTitle');
+  
+  if(idx === q.answer) {
+    btnObj.classList.add('correct');
+    fbT.innerText = 'CORRETO!';
+    fbT.className = 'feedback-title correct';
+    addXP(10);
+  } else {
+    btnObj.classList.add('wrong');
+    btns[q.answer].classList.add('correct');
+    fbT.innerText = 'INCORRETO';
+    fbT.className = 'feedback-title wrong';
+  }
+  
+  document.getElementById('qFbText').innerText = q.explain;
+  fb.style.display = 'block';
+  document.getElementById('btnNext').style.display = 'inline-block';
+}
+
+function nextQuestion() {
+  state.practiceQIndex++;
+  if(state.practiceQIndex >= state.practicePool.length) {
+    alert('Treinamento concluído! XP contabilizado.');
+    quitPractice();
+  } else {
+    loadPracticeQ();
+  }
+}
+
+function quitPractice() {
+  document.getElementById('practiceConfig').style.display = 'block';
+  document.getElementById('practiceArea').style.display = 'none';
+  showSection('dashboard', document.querySelectorAll('.nav-btn')[0]);
+}
+
+// ===================== SIMULADO =====================
+function startSim(qtd, timeMins) {
+  document.getElementById('simConfig').style.display = 'none';
+  document.getElementById('simArea').style.display = 'block';
+  document.getElementById('simResult').style.display = 'none';
+
+  let pool = [...QUESTIONS].sort(() => Math.random() - 0.5).slice(0, qtd);
+  state.simPool = pool;
+  state.simAnswers = new Array(qtd).fill(null);
+  state.simCurrentQ = 0;
+  state.simTimeRemaining = timeMins * 60;
+
+  renderSimNav();
+  loadSimQ();
+
+  clearInterval(state.simTimer);
+  state.simTimer = setInterval(() => {
+    state.simTimeRemaining--;
+    if(state.simTimeRemaining <= 0) { finishSim(); }
+    
+    let h = Math.floor(state.simTimeRemaining / 3600);
+    let m = Math.floor((state.simTimeRemaining % 3600) / 60);
+    let s = state.simTimeRemaining % 60;
+    
+    document.getElementById('simTimer').innerText = 
+      String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+  }, 1000);
+}
+
+function renderSimNav() {
+  let nav = document.getElementById('simNavGrid');
+  nav.innerHTML = '';
+  for(let i=0; i<state.simPool.length; i++) {
+    let cls = 'sim-nav-btn';
+    if(i === state.simCurrentQ) cls += ' active';
+    else if(state.simAnswers[i] !== null) cls += ' answered';
+    
+    nav.innerHTML += `<button class="${cls}" onclick="goToSimQ(${i})">${i+1}</button>`;
+  }
+}
+
+function loadSimQ() {
+  let q = state.simPool[state.simCurrentQ];
+  document.getElementById('simCounter').innerText = `Questão ${state.simCurrentQ + 1}/${state.simPool.length}`;
+  
+  let bBadge = document.getElementById('simBadge');
+  if(q.subj === 'mat') { bBadge.innerText = 'MATEMÁTICA'; bBadge.className = 'badge badge-math'; }
+  else { bBadge.innerText = 'PORTUGUÊS'; bBadge.className = 'badge badge-port'; }
+
+  document.getElementById('simText').innerText = q.text;
+
+  let optsList = document.getElementById('simOptions');
+  optsList.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    let letter = opt.substring(0,2);
+    let text = opt.substring(2);
+    let sel = (state.simAnswers[state.simCurrentQ] === i) ? 'selected' : '';
+    optsList.innerHTML += `<li class="option-btn ${sel}" onclick="answerSim(${i})"><span class="option-letter">${letter}</span>${text}</li>`;
+  });
+}
+
+function answerSim(idx) {
+  state.simAnswers[state.simCurrentQ] = idx;
+  renderSimNav();
+  loadSimQ();
+}
+
+function goToSimQ(idx) { state.simCurrentQ = idx; renderSimNav(); loadSimQ(); }
+function nextSimQ() { if(state.simCurrentQ < state.simPool.length-1) goToSimQ(state.simCurrentQ+1); }
+function prevSimQ() { if(state.simCurrentQ > 0) goToSimQ(state.simCurrentQ-1); }
+
+function finishSim() {
+  clearInterval(state.simTimer);
+  document.getElementById('simArea').style.display = 'none';
+  document.getElementById('simResult').style.display = 'block';
+
+  let hits = 0;
+  for(let i=0; i<state.simPool.length; i++) {
+    if(state.simAnswers[i] === state.simPool[i].answer) hits++;
+  }
+  
+  let total = state.simPool.length;
+  let pct = Math.round((hits/total)*100);
+
+  document.getElementById('resScore').innerText = `${hits}/${total}`;
+  let pEl = document.getElementById('resPct');
+  pEl.innerText = pct + '%';
+  pEl.style.color = pct >= 70 ? '#86efac' : '#fca5a5';
+
+  document.getElementById('resTitle').innerText = pct >= 50 ? 'APROVADO!' : 'REPROVADO';
+  document.getElementById('resTitle').style.color = pct >= 50 ? '#86efac' : '#fca5a5';
+
+  addXP(hits * 20);
+
+  let dateStr = new Date().toLocaleDateString('pt-BR');
+  state.simHistory.push({
+    date: dateStr,
+    type: total===25 ? 'Rápido' : 'Completo',
+    correct: hits,
+    total: total,
+    pct: pct,
+    passed: pct >= 50
+  });
+
+  updateDashboard();
+  updateProgressPage();
+}
+
+// ===================== PROGRESSO =====================
+function updateProgressPage() {
+  const matTopics = TOPICS.mat.length;
+  const portTopics = TOPICS.port.length;
+  
+  const matDone = state.topicsDone.filter(t => t.startsWith('mat_')).length;
+  const portDone = state.topicsDone.filter(t => t.startsWith('port_')).length;
+
+  const pMat = Math.round((matDone / matTopics)*100) || 0;
+  const pPort = Math.round((portDone / portTopics)*100) || 0;
+
+  document.getElementById('prMatTxt').innerText = pMat + '%';
+  document.getElementById('prMatBar').style.width = pMat + '%';
+  
+  document.getElementById('prPortTxt').innerText = pPort + '%';
+  document.getElementById('prPortBar').style.width = pPort + '%';
+
+  const tbody = document.getElementById('historyTableBody');
+  if(state.simHistory.length === 0) return;
+
+  tbody.innerHTML = state.simHistory.map(h => `
+    <tr>
+      <td>${h.date}</td>
+      <td>${h.type}</td>
+      <td>${h.correct}/${h.total}</td>
+      <td style="color:${h.pct>=50?'#86efac':'#fca5a5'}">${h.pct}%</td>
+      <td><span class="badge ${h.passed?'badge-easy':'badge-hard'}">${h.passed?'APROVADO':'REPROVADO'}</span></td>
+    </tr>`).join('');
+}
+
+// ===================== LOGIN =====================
+const SENHA = 'fuzileiro2025';
+
+function checkLogin() {
+  const val = document.getElementById('pwInput').value;
+  const err = document.getElementById('loginError');
+  if(val === SENHA) {
+    const screen = document.getElementById('loginScreen');
+    screen.style.transition = 'opacity 0.4s ease';
+    screen.style.opacity = '0';
+    setTimeout(() => {
+      screen.style.display = 'none';
+      document.getElementById('appContent').style.display = 'block';
+      init();
+    }, 400);
+  } else {
+    err.style.display = 'block';
+    document.getElementById('pwInput').value = '';
+    document.getElementById('pwInput').focus();
+    setTimeout(() => err.style.display = 'none', 3000);
+  }
+}
+
+function togglePw() {
+  const input = document.getElementById('pwInput');
+  input.type = input.type === 'password' ? 'text' : 'password';
+}
 
 </script>
-    <script>
-  // SISTEMA DE SALVAMENTO AUTOMÁTICO (AUTO-SAVE)
-  setInterval(function() {
-      if (typeof state !== 'undefined') {
-          localStorage.setItem('fuz_progresso_completo', JSON.stringify(state));
-      }
-  }, 2000); // Salva silenciosamente a cada 2 segundos
 
-  // Carrega os dados quando o app iniciar
+<!-- INÍCIO DO SISTEMA DE SALVAMENTO AUTOMÁTICO (AUTO-SAVE) -->
+<script>
+  // 1. Puxar os dados salvos no celular assim que o aplicativo abrir
   setTimeout(() => {
-      const salvo = localStorage.getItem('fuz_progresso_completo');
-      if (salvo) {
-          const dados = JSON.parse(salvo);
-          state.xp = dados.xp || 0;
-          state.topicsDone = dados.topicsDone || { mat: [], port: [] };
-          state.simHistory = dados.simHistory || [];
+      const progressoSalvo = localStorage.getItem('fuzileiro_naval_save');
+      if (progressoSalvo) {
+          // Mescla as variáveis salvas no state principal
+          state = Object.assign(state, JSON.parse(progressoSalvo));
           
+          // Atualiza as telas e progresso com os dados carregados
           if (typeof updateProgressPage === 'function') updateProgressPage();
           if (typeof updateDashboard === 'function') updateDashboard();
+          if (typeof renderTopicList === 'function') renderTopicList();
+          
+          // Atualizar barra de XP na inicialização baseada no valor recarregado
+          document.getElementById('xpDisplay').innerText = state.xp;
+          let pct = Math.min((state.xp / 5000)*100, 100);
+          document.getElementById('xpBar').style.width = pct + '%';
       }
-  }, 800);
+  }, 500); // Aguarda meio segundo para garantir que as estruturas HTML já carregaram
+
+  // 2. Salvar automaticamente toda vez que ele fechar, sair ou recarregar a página
+  window.addEventListener('beforeunload', function() {
+      localStorage.setItem('fuzileiro_naval_save', JSON.stringify(state));
+  });
+
+  // 3. Auto-Save de Segurança: Salva o progresso a cada 2 segundos em segundo plano
+  setInterval(function() {
+      if (typeof state !== 'undefined') {
+          localStorage.setItem('fuzileiro_naval_save', JSON.stringify(state));
+      }
+  }, 2000);
 </script>
+<!-- FIM DO SISTEMA DE SALVAMENTO AUTOMÁTICO -->
+
 </body>
 </html>
