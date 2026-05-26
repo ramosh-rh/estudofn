@@ -205,5 +205,27 @@
     window.onload = carregarDados;
 
 </script>
+    <script>
+  // SISTEMA DE SALVAMENTO AUTOMÁTICO (AUTO-SAVE)
+  setInterval(function() {
+      if (typeof state !== 'undefined') {
+          localStorage.setItem('fuz_progresso_completo', JSON.stringify(state));
+      }
+  }, 2000); // Salva silenciosamente a cada 2 segundos
+
+  // Carrega os dados quando o app iniciar
+  setTimeout(() => {
+      const salvo = localStorage.getItem('fuz_progresso_completo');
+      if (salvo) {
+          const dados = JSON.parse(salvo);
+          state.xp = dados.xp || 0;
+          state.topicsDone = dados.topicsDone || { mat: [], port: [] };
+          state.simHistory = dados.simHistory || [];
+          
+          if (typeof updateProgressPage === 'function') updateProgressPage();
+          if (typeof updateDashboard === 'function') updateDashboard();
+      }
+  }, 800);
+</script>
 </body>
 </html>
